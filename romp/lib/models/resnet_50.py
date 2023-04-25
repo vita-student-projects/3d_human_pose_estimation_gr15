@@ -26,7 +26,8 @@ class ResNet_50(nn.Module):
         #self.load_pretrain_params()
 
     def load_pretrain_params(self):
-        if os.path.exists(args().resnet_pretrain):
+        if os.path.exists(args().resnet_pretrain) and False:
+            print("USE PRETRAINED")
             success_layer = copy_state_dict(self.state_dict(), torch.load(args().resnet_pretrain), prefix = '', fix_loaded=True)
 
     def image_preprocess(self, x):

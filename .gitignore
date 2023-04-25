@@ -16,3 +16,5 @@ __pycache__/
 demo/images/
 log/*
 dataset
+model_data
+test

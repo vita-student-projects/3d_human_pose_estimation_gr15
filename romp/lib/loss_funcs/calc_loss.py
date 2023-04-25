@@ -101,7 +101,6 @@ class Loss(nn.Module):
                     kp_loss_dict['PAMPJPE'] = pampjpe_each
                 except Exception as exp_error:
                     print('PA_MPJPE calculation failed!', exp_error)
-            
             if args().MPJPE_weight>0:
                 fit_mask = kp3d_mask.bool()
                 if fit_mask.sum()>0:

@@ -99,7 +99,7 @@ class Image_base(Dataset):
         # valid annotation flags for 
         # 0: 2D pose/bounding box(True/False), # detecting all person/front-view person(True/False)
         # 1: 3D pose, 2: subject id, 3: smpl root rot, 4: smpl pose param, 5: smpl shape param, 6: verts, 7:depth
-        valid_masks = np.zeros((self.max_person, 8), dtype=np.bool)
+        valid_masks = np.zeros((self.max_person, 8), dtype=bool)
         info = self.get_image_info(index)
 
         position_augments, pixel_augments = self._calc_augment_confs(info['image'], info['kp2ds'], is_pose2d=info['vmask_2d'][:,0])
@@ -285,7 +285,7 @@ class Image_base(Dataset):
     def process_kp2ds_bboxes(self, full_kps, img_shape=None, is_pose2d=None):
         person_centers = np.ones((self.max_person, 2))*-2.
         full_kp2ds = np.ones((self.max_person, self.joint_number, 2))*-2.
-        valid_mask_kp2ds = np.zeros(self.max_person, dtype=np.bool)
+        valid_mask_kp2ds = np.zeros(self.max_person, dtype=bool)
         used_person_inds, bboxes_hw_norm, occluded_by_who = [], [], None
         
         if is_pose2d.sum()>0:
@@ -319,7 +319,7 @@ class Image_base(Dataset):
         return centermap, person_centers, full_kp2ds, used_person_inds, valid_mask_kp2ds, bboxes_hw_norm, heatmap, AE_joints
 
     def process_suject_ids(self, subject_ids, used_person_inds, valid_mask_ids=False):
-        person_ids, valid_id_mask = np.ones(self.max_person)*-1, np.zeros(self.max_person,dtype=np.bool)
+        person_ids, valid_id_mask = np.ones(self.max_person)*-1, np.zeros(self.max_person,dtype=bool)
         if subject_ids is None:
             return person_ids, valid_id_mask
         for inds, s_inds in enumerate(used_person_inds):
@@ -339,7 +339,7 @@ class Image_base(Dataset):
         return image, dst_image, org_image
 
     def process_kp3ds(self, kp3ds, used_person_inds, augments=None, valid_mask_kp3ds=None):
-        kp3d_flag = np.zeros(self.max_person, dtype=np.bool)
+        kp3d_flag = np.zeros(self.max_person, dtype=bool)
         joint_num = self.joint_number if self.train_flag or kp3ds is None else kp3ds[0].shape[0]
         kp3d_processed = np.ones((self.max_person, joint_num, 3), dtype=np.float32)*-2. # -2 serves as an invisible flag
 
@@ -362,7 +362,7 @@ class Image_base(Dataset):
 
     def process_smpl_params(self, params, used_person_inds, augments=None, valid_mask_smpl=None):
         params_processed = np.ones((self.max_person,76), dtype=np.float32)*-10
-        smpl_flag = np.zeros((self.max_person, 3), dtype=np.bool)
+        smpl_flag = np.zeros((self.max_person, 3), dtype=bool)
 
         for inds, used_id in enumerate(used_person_inds):
             if valid_mask_smpl[used_id].sum()>0:
@@ -376,9 +376,9 @@ class Image_base(Dataset):
 
     def process_verts(self, verts, root_trans, used_person_inds, augments=None, valid_mask_verts=None, valid_mask_depth=None):
         verts_processed = np.ones((self.max_person,6890, 3), dtype=np.float32)*-10
-        verts_flag = np.zeros(self.max_person, dtype=np.bool)
+        verts_flag = np.zeros(self.max_person, dtype=bool)
         root_trans_processed = np.ones((self.max_person, 3), dtype=np.float32)*-2
-        depth_flag = np.zeros(self.max_person, dtype=np.bool)
+        depth_flag = np.zeros(self.max_person, dtype=bool)
         if root_trans is not None:
             root_trans_processed[:len(used_person_inds)] = root_trans[used_person_inds]
             depth_flag[:len(used_person_inds)] = valid_mask_depth[used_person_inds]
@@ -554,7 +554,7 @@ def detect_occluded_person(person_centers, full_kp2ds, thresh=2*64/512.):
                         if occluded_by_who[closet_idx]<0:
                             occluded_by_who[inds] = closet_idx
 
-    return occluded_by_who.astype(np.int)
+    return occluded_by_who.astype(int)
 
 def _calc_bbox_normed(full_kps):
     bboxes = []
@@ -662,7 +662,7 @@ def test_image_dataset(dataset,with_3d=False,with_smpl=False):
                 cv2.imwrite('{}/{}_{}_projection.jpg'.format(save_dir,_,img_bsname), image_kp2d_projection)
 
             for person_center, subject_id in zip(person_centers,subject_ids):
-                y,x = person_center.astype(np.int)
+                y,x = person_center.astype(int)
                 if y>0 and x>0:
                     image_kp2d[y-10:y+10, x-10:x+10] = [0,0,255]
                     cv2.putText(image_kp2d,'id:{}'.format(subject_id), (x,y),cv2.FONT_HERSHEY_COMPLEX,0.5,(255,0,255),1)
@@ -674,7 +674,7 @@ def test_image_dataset(dataset,with_3d=False,with_smpl=False):
                 heatmap_color = make_heatmaps(image.copy(), r['heatmap'][inds])
                 cv2.imwrite('{}/{}_{}_heatmap.jpg'.format(save_dir,_,img_bsname), heatmap_color)
 
-            person_centers_onmap = ((r['person_centers'][inds].numpy() + 1)/ 2.0 * (args().centermap_size-1)).astype(np.int)
+            person_centers_onmap = ((r['person_centers'][inds].numpy() + 1)/ 2.0 * (args().centermap_size-1)).astype(int)
             positive_position = torch.stack(torch.where(r['centermap'][inds,0]==1)).permute(1,0)
 
         if with_smpl and r['valid_masks'][0,0,4]:

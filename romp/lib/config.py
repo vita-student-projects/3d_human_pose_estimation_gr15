@@ -19,7 +19,7 @@ yaml_timestamp = os.path.abspath(os.path.join(project_dir, 'active_configs' + os
 
 model_dir = os.path.join(project_dir,'model_data')
 trained_model_dir = os.path.join(project_dir,'trained_models')
-smpl_model_dir = os.path.join(os.path.expanduser("~"),'.romp')
+smpl_model_dir = os.path.join("model_data/smpl_models")
 if not os.path.exists(smpl_model_dir):
     smpl_model_dir = os.path.join(model_dir,'smpl_models')
 
@@ -77,6 +77,8 @@ def parse_args(input_args=None):
     mode_group.add_argument('--model_version',type = int,default = 1,help = 'model version')
     mode_group.add_argument('--multi_person',type = bool,default = True,help = 'whether to make Multi-person Recovery')
     mode_group.add_argument('--new_training',type = bool,default = False, help='learning centermap only in first few iterations for stable training.')
+    # mode_group.add_argument('--new_training_iters',type = int,default = 2, help='learning centermap only in first few iterations for stable training.')
+
     mode_group.add_argument('--perspective_proj',type = bool,default = False,help = 'whether to use perspective projection, else use orthentic projection.')
     mode_group.add_argument('--image_loading_mode', type=str, default='image', help='The Base Class (image, image_relative) used for loading dataset.')
 
@@ -167,7 +169,7 @@ def parse_args(input_args=None):
 
     dataset_group = parser.add_argument_group(title='datasets options')
     #dataset setting:
-    dataset_group.add_argument('--dataset_rootdir',type=str, default=os.path.join(root_dir,'dataset/'), help= 'root dir of all datasets')
+    dataset_group.add_argument('--dataset_rootdir',type=str, default="/media/svenbecker/Data_HDD_Linux/dlav/dataset", help= 'root dir of all datasets')
     dataset_group.add_argument('--dataset',type=str, default='h36m,mpii,coco,aich,up,ochuman,lsp,movi' ,help = 'which datasets are used')
     dataset_group.add_argument('--voc_dir', type = str, default = os.path.join(root_dir, 'dataset/VOCdevkit/VOC2012/'), help = 'VOC dataset path')
     dataset_group.add_argument('--max_person',default=64,type=int,help = 'max person number of each image')

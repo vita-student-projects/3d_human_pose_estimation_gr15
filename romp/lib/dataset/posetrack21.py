@@ -93,7 +93,7 @@ def get_joints_ids(anno):
     for i, obj in enumerate(anno):
         bbox = np.array(obj['bbox'])
         joint = np.array(obj['keypoints']).reshape([-1, 3])
-        valid_mask = ((joint[:, 0]>0) * (joint[:, 1]>0)).astype(np.bool)
+        valid_mask = ((joint[:, 0]>0) * (joint[:, 1]>0)).astype(bool)
         # 0 means lacking labels
         joint[~valid_mask] = -2
         joint[:,-1] = valid_mask

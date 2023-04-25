@@ -36,9 +36,12 @@ class ResultParser(nn.Module):
         else:
             outputs,meta_data = self.match_params(outputs, meta_data, cfg)
         if 'params_pred' in outputs and self.with_smpl_parser and args().calc_smpl_mesh:
+            # print("A")
             outputs = self.params_map_parser(outputs,meta_data)
             
         if 'detection_flag' not in outputs:
+            # print("B")
+
             outputs['detection_flag'] = self.determine_detection_flag(outputs, meta_data)
         return outputs,meta_data
 
@@ -188,7 +191,9 @@ class ResultParser(nn.Module):
         return mc
 
     def match_params(self, outputs, meta_data, cfg):
+        # gt_keys = ['params', 'full_kp2d', 'kp_3d', 'subject_ids', 'valid_masks', 'pj2d']
         gt_keys = ['params', 'full_kp2d', 'kp_3d', 'subject_ids', 'valid_masks']
+
         exclude_keys = ['heatmap','centermap','AE_joints','person_centers','all_person_detected_mask']
 
         center_gts_info = process_gt_center(meta_data['person_centers'])

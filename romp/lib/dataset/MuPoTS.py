@@ -101,8 +101,8 @@ def MuPoTS(base_class=default_mode):
                 seq_kp2ds = np.zeros((frame_num, subject_num, 17, 2))
                 seq_kp3ds = np.zeros((frame_num, subject_num, 17, 3))
                 seq_univ_kp3ds = np.zeros((frame_num, subject_num, 17, 3))
-                seq_valid_flag = np.zeros((frame_num, subject_num),dtype=np.bool)
-                seq_joint_occlusion = np.zeros((frame_num, subject_num, 17),dtype=np.bool)
+                seq_valid_flag = np.zeros((frame_num, subject_num),dtype=bool)
+                seq_joint_occlusion = np.zeros((frame_num, subject_num, 17),dtype=bool)
                 seq_track_ids = np.zeros((frame_num, subject_num))
                 seq_camMats = np.zeros((frame_num, 4))
                 for frame_id in range(len(annotation)):

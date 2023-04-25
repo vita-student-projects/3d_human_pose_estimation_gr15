@@ -11,7 +11,7 @@ class Image_base_relative(Image_base):
         # valid annotation flags for 
         # 0: 2D pose/bounding box(True/False), # 7: detecting all person/front-view person(True/False)
         # 1: 3D pose, 2: subject id, 3: smpl root rot, 4: smpl pose param, 5: smpl shape param, 6: global translation, 7: vertex of SMPL model
-        valid_masks = np.zeros((self.max_person, 8), dtype=np.bool)
+        valid_masks = np.zeros((self.max_person, 8), dtype=bool)
         info = self.get_image_info(index)
 
         position_augments, pixel_augments = self._calc_augment_confs(info['image'], info['kp2ds'], is_pose2d=info['vmask_2d'][:,0])
@@ -194,7 +194,7 @@ def test_image_relative_dataset(dataset,with_3d=False,with_smpl=False):
                 cv2.imwrite('{}/{}_{}_projection.jpg'.format(save_dir,_,img_bsname), image_kp2d_projection)
 
             for pinds, (person_center, subject_id) in enumerate(zip(person_centers,subject_ids)):
-                y,x = person_center.astype(np.int)
+                y,x = person_center.astype(int)
                 if y>0 and x>0:
                     cv2.circle(image_kp2d, (x,y), 6, [0,0,255],-1)
                     text = '{}'.format(subject_id)
@@ -218,7 +218,7 @@ def test_image_relative_dataset(dataset,with_3d=False,with_smpl=False):
             #             centermap_3d = r['centermap_3d'][rind]
             #             visualize_3d_hmap(centermap_3d, '{}/{}_{}'.format(save_dir, _, rind))
 
-            person_centers_onmap = ((r['person_centers'][inds].numpy() + 1)/ 2.0 * (args().centermap_size-1)).astype(np.int)
+            person_centers_onmap = ((r['person_centers'][inds].numpy() + 1)/ 2.0 * (args().centermap_size-1)).astype(int)
             positive_position = torch.stack(torch.where(r['centermap'][inds,0]==1)).permute(1,0)
 
         if with_smpl and r['valid_masks'][0,0,4]:
@@ -257,7 +257,7 @@ def test_image_relative_dataset(dataset,with_3d=False,with_smpl=False):
                 image = np.array(image).astype(np.uint8)
                 if len(person_centers) == len(trans):
                     for pinds, person_center in enumerate(person_centers):
-                        y,x = person_center.astype(np.int)
+                        y,x = person_center.astype(int)
                         if y>0 and x>0:
                             cv2.circle(np.array(image), (x,y), 6, [0,0,255],-1)
                             text = '{:.2f}'.format(trans[pinds,2])

@@ -407,7 +407,7 @@ def estimate_translation(joints_3d, joints_2d, pts_mnum=4,focal_length=600, proj
         joints_conf = joints_2d[:, :, -1]>0
     joints3d_conf = joints_3d[:, :, -1]!=-2.
     
-    trans = np.zeros((joints_3d.shape[0], 3), dtype=np.float)
+    trans = np.zeros((joints_3d.shape[0], 3), dtype=float)
     if proj_mats is None:
         proj_mats = [None for _ in range(len(joints_2d))]
     if cam_dists is None:
@@ -441,7 +441,7 @@ def estimate_translation(joints_3d, joints_2d, pts_mnum=4,focal_length=600, proj
 #-----------------------------------------------------------------------------------------#
 
 def joint_mapping(source_format, target_format):
-    mapping = np.ones(len(target_format),dtype=np.int)*-1
+    mapping = np.ones(len(target_format),dtype=int)*-1
     for joint_name in target_format:
         if joint_name in source_format:
             mapping[target_format[joint_name]] = source_format[joint_name]
