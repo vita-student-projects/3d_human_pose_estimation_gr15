@@ -90,8 +90,8 @@ class Loss(nn.Module):
             kp_loss_dict['P_KP2D'] = batch_kp_2d_l2_loss(real_2d.float().clone(), outputs['pj2d'].float().clone())
         
             kp3d_mask = meta_data['valid_masks'][:,1]
-        
-        if kp3d_mask.sum()>1 and 'j3d' in outputs:
+        if kp3d_mask.sum()>0 and 'j3d' in outputs:
+
             kp3d_gt = meta_data['kp_3d'].contiguous().to(outputs['j3d'].device)
             preds_kp3d = outputs['j3d'][:, :kp3d_gt.shape[1]].contiguous()
 
@@ -103,6 +103,8 @@ class Loss(nn.Module):
                     print('PA_MPJPE calculation failed!', exp_error)
             if args().MPJPE_weight>0:
                 fit_mask = kp3d_mask.bool()
+
+
                 if fit_mask.sum()>0:
                     mpjpe_each = calc_mpjpe(kp3d_gt[fit_mask].contiguous(), preds_kp3d[fit_mask].contiguous(), align_inds=self.align_inds_MPJPE)
                     kp_loss_dict['MPJPE'] = mpjpe_each

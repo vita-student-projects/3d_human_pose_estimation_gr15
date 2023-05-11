@@ -58,7 +58,7 @@ def create_smpl_mesh():
     #         self.meshes.append(new_mesh)
     #     self.set_meshes_zero(list(range(self.current_mesh_num)))
     
-    smpl_param_dict = pickle.load(open(os.path.join(args().smpl_model_path,'SMPL_NEUTRAL.pkl'),'rb'), encoding='latin1')
+    smpl_param_dict = pickle.load(open(os.path.join(args().smpl_model_dir,'SMPL_NEUTRAL.pkl'),'rb'), encoding='latin1')
     faces = smpl_param_dict['f']
     vertices = smpl_param_dict['v_template']
     if args().mesh_cloth in constants.wardrobe or args().mesh_cloth=='random':

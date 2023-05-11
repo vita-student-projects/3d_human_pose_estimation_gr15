@@ -56,7 +56,9 @@ class AverageMeter_Dict(object):
         return dict_sum
 
     def avg(self):
-        print(self.dict_store)
+        # print("['MPJPE']", self.dict_store['MPJPE'])
+        
+        # print("['PAMPJPE']", self.dict_store['PAMPJPE'])
         dict_sum = self.sum()
         dict_avg = {}
         for k,v in dict_sum.items():

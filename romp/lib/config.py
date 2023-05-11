@@ -99,7 +99,7 @@ def parse_args(input_args=None):
 
     model_group = parser.add_argument_group(title='model settings')
     # model settings
-    model_group.add_argument('--backbone',type = str,default = 'hrnetv4',help = 'backbone model: resnet50 or hrnet')
+    model_group.add_argument('--backbone',type = str,default = 'resnet50',help = 'backbone model: resnet50 or hrnet')
     model_group.add_argument('--model_precision', type=str, default='fp16', help='the model precision: fp16/fp32')
     model_group.add_argument('--deconv_num', type=int, default=0)
     model_group.add_argument('--head_block_num',type = int,default = 2,help = 'number of conv block in head')
@@ -185,10 +185,12 @@ def parse_args(input_args=None):
     smpl_group.add_argument('--smpl_joint_num',type = int,default = 22, help = 'joint number of SMPL model we estimate')
     
     #smpl_group.add_argument('--smpl_model_path',type = str,default = os.path.join(model_dir,'parameters'),help = 'smpl model path')
-    #smpl_group.add_argument('--smpl_J_reg_h37m_path',type = str,default = os.path.join(model_dir, 'parameters', 'J_regressor_h36m.npy'),help = 'SMPL regressor for 17 joints from H36M datasets')
+    smpl_group.add_argument('--smpl_J_reg_h37m_path',type = str,default = os.path.join(model_dir, 'parameters', 'J_regressor_h36m.npy'),help = 'SMPL regressor for 17 joints from H36M datasets')
     #smpl_group.add_argument('--smpl_J_reg_extra_path',type = str,default = os.path.join(model_dir, 'parameters', 'J_regressor_extra.npy'),help = 'SMPL regressor for 9 extra joints from different datasets')
     
     smpl_group.add_argument('--smpl_model_path',type = str,default = os.path.join(smpl_model_dir,'smpl_packed_info.pth'),help = 'smpl model path')
+    smpl_group.add_argument('--smpl_model_dir',type = str,default = smpl_model_dir, help = 'smpl model path')
+
     smpl_group.add_argument('--smpla_model_path',type = str,default = os.path.join(smpl_model_dir,'SMPLA_NEUTRAL.pth'),help = 'smpl model path') #SMPLA_FEMALE gets better MPJPE #smpla_packed_info.pth
     smpl_group.add_argument('--smil_model_path',type = str,default = os.path.join(smpl_model_dir,'smil_packed_info.pth'),help = 'smpl model path')
     smpl_group.add_argument('--smpl_prior_path',type = str,default = os.path.join(model_dir,'parameters','gmm_08.pkl'),help = 'smpl model path')

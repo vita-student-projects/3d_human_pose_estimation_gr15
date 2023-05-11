@@ -10,7 +10,9 @@ from models.bev_model import BEV
 Backbones = {'hrnet': HigherResolutionNet, 'resnet': ResNet_50}
 Heads = {1: ROMP, 6:BEV}
 
+
 def build_model():
+
     if args().backbone in Backbones:
         backbone = Backbones[args().backbone]()
     else:

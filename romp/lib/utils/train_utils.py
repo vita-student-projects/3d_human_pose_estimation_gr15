@@ -8,6 +8,10 @@ def justify_detection_state(detection_flag, reorganize_idx):
     if detection_flag.sum() == 0:
         detection_flag = False
     else:
+        print("R", reorganize_idx)
+        print("R", detection_flag)
+        
+
         reorganize_idx = reorganize_idx[detection_flag.bool()].long()
         detection_flag = True
     return detection_flag, reorganize_idx

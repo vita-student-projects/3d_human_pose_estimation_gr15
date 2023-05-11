@@ -34,7 +34,7 @@ class Webcam_processor(Predictor):
 
         if self.visulize_platform == 'integrated':
             from visualization.open3d_visualizer import Open3d_visualizer
-            visualizer = Open3d_visualizer(multi_mode=not args().show_largest_person_only)
+            visualizer = Open3d_visualizer(multi_mode=False)
         elif self.visulize_platform == 'blender':
             from visualization.socket_utils import SocketClient_blender
             sender = SocketClient_blender()
@@ -118,10 +118,10 @@ class Webcam_processor(Predictor):
                 cams = np.array([result['cam'] for result in results[frame_id]])
                 # to elimate the y-axis offset
                 cams[:,2] -= 0.26
-                trans = np.array([convert_cam_to_3d_trans(cam) for cam in cams])
+                trans = np.array([convert_cam_to_3d_trans(cam).numpy() for cam in cams])
                 poses = np.array([result['poses'] for result in results[frame_id]])
                 betas = np.array([result['betas'] for result in results[frame_id]])
-                kp3ds = np.array([result['j3d_smpl24'] for result in results[frame_id]])
+                # kp3ds = np.array([result['j3d_smpl24'] for result in results[frame_id]])
                 verts = np.array([result['verts'] for result in results[frame_id]])
                 
                 if self.visulize_platform == 'vis_server':
@@ -132,7 +132,7 @@ class Webcam_processor(Predictor):
                     if self.character == 'nvxia':
                         verts = self.character_model(poses)['verts'].numpy()
                     if args().show_largest_person_only:
-                        trans_largest = trans[0] if self.add_trans else None
+                        trans_largest =  None
                         # please make sure the (x, y, z) of visualized verts are all in range (-1, 1)
                         # print(verts_largest.max(0), verts_largest.min(0))
                         visualizer.run(verts[0], trans=trans_largest)

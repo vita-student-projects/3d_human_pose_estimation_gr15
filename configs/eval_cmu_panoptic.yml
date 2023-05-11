@@ -4,7 +4,7 @@ ARGS:
  GPUS: 0
  model_version: 1
  
- val_batch_size: 32
+ val_batch_size: 8
  nw_eval: 2
  eval: True
  collision_aware_centermap: False
@@ -17,4 +17,4 @@ ARGS:
  smpl_mesh_root_align: True
 
  model_path: trained_models/ROMP_ResNet50_V1.pkl
- dataset_rootdir: '/media/yusun/Extreme SSD/dataset' #'/path/to/dataset/3DPW'
+ dataset_rootdir: '/media/svenbecker/Data_HDD_Linux/dlav/dataset' #'/path/to/dataset/3DPW'
