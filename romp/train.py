@@ -101,7 +101,8 @@ class Trainer(Base):
             
             if self.global_count%self.test_interval==0 or self.global_count==self.fast_eval_iter: #self.print_freq*2
                 save_model(self.model,'{}_val_cache.pkl'.format(self.tab),parent_folder=self.model_save_dir)
-                self.validation(epoch)
+                logging.warn("Skipping validation step")
+                # self.validation(epoch)
             
             if self.distributed_training:
                 # wait for rank 0 process finish the job

@@ -3,10 +3,12 @@ ARGS:
  tab: 'webcam'
  gpu: 0 
 
- backbone: 'resnet'
- model_precision: 'fp32'
+ backbone: 'effnet'
+ model_precision: 'fp16'
  val_batch_size: 1
- model_path:   'trained_models/ROMP_ResNet50_V1.pkl'
+#  model_path:   'trained_models/ROMP_ResNet50_V1.pkl'
+ model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val/effnet_cm64_V1_effnet_epoch_2.pkl
+
  save_mesh: False
  save_centermap: False
  save_dict_results: False
@@ -33,5 +35,5 @@ ARGS:
  
  # for picking up sepcific cloth from the wardrobe in model_data, please refer to romp/lib/constants.py
  # 'ghostwhite'/'LightCyan' for using the single color texture.
- mesh_cloth: '001' # 'random' #
+ mesh_cloth: '009' # 'random' #
  character: 'smpl' # 'nvxia' # 

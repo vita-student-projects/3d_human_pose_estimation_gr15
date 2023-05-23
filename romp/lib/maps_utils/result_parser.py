@@ -191,8 +191,8 @@ class ResultParser(nn.Module):
         return mc
 
     def match_params(self, outputs, meta_data, cfg):
-        # gt_keys = ['params', 'full_kp2d', 'kp_3d', 'subject_ids', 'valid_masks', 'pj2d']
-        gt_keys = ['params', 'full_kp2d', 'kp_3d', 'subject_ids', 'valid_masks']
+        gt_keys = ['params', 'full_kp2d', 'kp_3d', 'subject_ids', 'valid_masks', 'pj2d']
+        # gt_keys = ['params', 'full_kp2d', 'kp_3d', 'subject_ids', 'valid_masks']
 
         exclude_keys = ['heatmap','centermap','AE_joints','person_centers','all_person_detected_mask']
 
@@ -212,7 +212,6 @@ class ResultParser(nn.Module):
         
         if 'params_maps' in outputs and 'params_pred' not in outputs:
             outputs['params_pred'] = self.parameter_sampling(outputs['params_maps'], batch_ids, flat_inds, use_transform=True)
-
         outputs, meta_data = reorganize_data(outputs, meta_data, exclude_keys, gt_keys, batch_ids, person_ids)
         outputs['centers_pred'] = torch.stack([flat_inds%args().centermap_size, flat_inds//args().centermap_size],1)
         return outputs, meta_data

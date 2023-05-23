@@ -42,6 +42,8 @@ class Loss(nn.Module):
         loss_dict = detect_loss_dict
         kp_error = None
         if (detection_flag or args().model_return_loss) and args().calc_mesh_loss:
+            # print(outputs['meta_data'].keys())
+
             mPCKh = _calc_matched_PCKh_(outputs['meta_data']['full_kp2d'].float(), outputs['pj2d'].float(), outputs['meta_data']['valid_masks'][:,0])
             matched_mask = mPCKh > args().matching_pckh_thresh
             kp_loss_dict, kp_error = self._calc_keypoints_loss(outputs, meta_data, matched_mask)

@@ -43,7 +43,8 @@ class Base(object):
             if self.model_version==6:
                 model = load_model(self.model_path, model, prefix = 'module.', drop_prefix=drop_prefix, fix_loaded=True)
             else:
-                model = load_model(self.model_path, model, prefix = 'module.', drop_prefix=drop_prefix, fix_loaded=False) 
+                model = load_model(self.model_path, model, prefix = '', drop_prefix=drop_prefix, fix_loaded=False) 
+                # model = load_model(self.model_path, model, prefix = 'module.', drop_prefix=drop_prefix, fix_loaded=False) 
                 train_entire_model(model)
         if self.distributed_training:
             print('local_rank', self.local_rank)

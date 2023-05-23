@@ -1,10 +1,10 @@
-from base import *
-from eval import val_result
-from loss_funcs import Learnable_Loss
-from maps_utils import HeatmapParser,CenterMap
-from loss_funcs.maps_loss import focal_loss, Heatmap_AE_loss
-from loss_funcs.keypoints_loss import batch_kp_2d_l2_loss
-from visualization.visualization import draw_skeleton_multiperson, draw_skeleton, make_heatmaps
+from .base import *
+from .eval import val_result
+from .lib.loss_funcs import Learnable_Loss
+from .lib.maps_utils import HeatmapParser,CenterMap
+from .lib.loss_funcs.maps_loss import focal_loss, Heatmap_AE_loss
+from .lib.loss_funcs.keypoints_loss import batch_kp_2d_l2_loss
+from .lib.visualization.visualization import draw_skeleton_multiperson, draw_skeleton, make_heatmaps
 np.set_printoptions(precision=2, suppress=True)
 
 class Trainer(Base):
@@ -20,20 +20,20 @@ class Trainer(Base):
             self.heatmap_parser = HeatmapParser()
             self.heatmap_aeloss = Heatmap_AE_loss(17, loss_type_HM=args().HMloss_type, loss_type_AE='exp')
             self.centermap_parser = CenterMap()
-        self.train_cfg = {'mode':'train', 'update_data': True, 'calc_loss': True if self.model_return_loss else False, \
-                           'new_training': False}
+        self.train_cfg = {'mode':'matching_gts', 'is_training':True, 'update_data': True, 'calc_loss': True, \
+                            'with_nms':False, 'with_2d_matching':True, 'k': False}
         self.eval_cfg = {'mode':'train', 'calc_loss': False}
         self.val_cfg = {'mode':'val', 'calc_loss': False}
         
-        self.result_save_dir = '/export/home/suny/pretrain_result_images'
+        self.result_save_dir = './pretrain_result_images'
         os.makedirs(self.result_save_dir,exist_ok=True)
         logging.info('Initialization of Trainer finished!')
 
     def set_up_validation(self):
         self.evaluation_results_dict = {}
         self.dataset_val_list, self.dataset_test_list = {}, {}
-        self.dataset_val_list['coco'] = self._create_single_data_loader(dataset='coco', train_flag=False, regress_smpl=False)
-        self.dataset_val_list['crowdhuman'] = self._create_single_data_loader(dataset='crowdhuman', train_flag=False)
+        # self.dataset_val_list['coco'] = self._create_single_data_loader(dataset='coco', train_flag=False, regress_smpl=False)
+        # self.dataset_val_list['crowdhuman'] = self._create_single_data_loader(dataset='crowdhuman', train_flag=False)
         
         logging.info('dataset_val_list:{}'.format(list(self.dataset_val_list.keys())))
 
@@ -44,13 +44,13 @@ class Trainer(Base):
             loss_dict['heatmap'],loss_dict['AE'] = self.heatmap_AE_loss(meta_data['full_kp2d'].to(device), outputs['kp_ae_maps'], meta_data['heatmap'].to(device), meta_data['AE_joints'])
         all_person_mask = meta_data['all_person_detected_mask'].to(device)
         if all_person_mask.sum()>0:
-            loss_dict['CenterMap'] = focal_loss(outputs['center_map'][all_person_mask], meta_data['centermap'][all_person_mask].to(device))
+            loss_dict['CenterMap'] = focal_loss(outputs['center_map'][all_person_mask.cpu()], meta_data['centermap'][all_person_mask.cpu()].to(device))
 
         loss_names = list(loss_dict.keys())
         for name in loss_names:
             if isinstance(loss_dict[name],tuple):
                 loss_dict[name] = loss_dict[name][0]
-            loss_dict[name] = loss_dict[name].mean() * eval('args.{}_weight'.format(name))
+            loss_dict[name] = loss_dict[name].mean() * eval('args().{}_weight'.format(name))
 
         return {'loss_dict':loss_dict}
 
@@ -87,14 +87,15 @@ class Trainer(Base):
             self.optimizer.zero_grad()
             if self.model_precision=='fp16':
                 with autocast():
-                    outputs = self.model(meta_data)
+                    outputs = self.network_forward(self.model, meta_data, self.train_cfg)
                 outputs.update(self._calc_loss(outputs, meta_data))
+
                 loss, outputs = self.mutli_task_uncertainty_weighted_loss(outputs)
                 self.scaler.scale(loss).backward()
                 self.scaler.step(self.optimizer)
                 self.scaler.update()
             else:
-                outputs = self.model(meta_data)
+                outputs = self.network_forward(self.model, meta_data, self.train_cfg)
                 outputs.update(self._calc_loss(outputs, meta_data))
                 loss, outputs = self.mutli_task_uncertainty_weighted_loss(outputs)
                 loss.backward()
@@ -116,7 +117,7 @@ class Trainer(Base):
                     losses.reset(); losses_dict.reset(); data_time.reset()
                     self.summary_writer.flush()
 
-            if self.global_count%self.test_interval==0 or (self.global_count==10 and self.fast_eval):
+            if self.global_count%self.test_interval==0 or (self.global_count==10 and args().fast_eval):
                 self.validation(epoch)
             batch_start_time = time.time()
             

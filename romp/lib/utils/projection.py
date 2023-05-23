@@ -28,9 +28,9 @@ def convert_kp2d_from_input_to_orgimg(kp2ds, offsets):
 def convert_cam_to_3d_trans(cams, weight=2.):
     if isinstance(cams, np.ndarray):
         cams = torch.tensor([cams]).cpu()
-    print(type(cams))
+    # print(type(cams))
     
-    print(cams)
+    # print(cams)
     (s, tx, ty) = cams[:,0], cams[:,1], cams[:,2]
     depth, dx, dy = 1./s, tx/s, ty/s
     trans3d = torch.stack([dx, dy, depth], 1)*weight

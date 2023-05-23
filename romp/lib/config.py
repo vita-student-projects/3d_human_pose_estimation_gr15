@@ -99,7 +99,7 @@ def parse_args(input_args=None):
 
     model_group = parser.add_argument_group(title='model settings')
     # model settings
-    model_group.add_argument('--backbone',type = str,default = 'resnet50',help = 'backbone model: resnet50 or hrnet')
+    model_group.add_argument('--backbone',type = str,default = 'effnet',help = 'backbone model: resnet50 or hrnet or effnet')
     model_group.add_argument('--model_precision', type=str, default='fp16', help='the model precision: fp16/fp32')
     model_group.add_argument('--deconv_num', type=int, default=0)
     model_group.add_argument('--head_block_num',type = int,default = 2,help = 'number of conv block in head')
@@ -107,6 +107,8 @@ def parse_args(input_args=None):
     model_group.add_argument('--use_coordmaps',type = bool,default = True,help = 'use the coordmaps')
     model_group.add_argument('--hrnet_pretrain', type=str, default= os.path.join(project_dir,'trained_models/pretrain_hrnet.pkl'))
     model_group.add_argument('--resnet_pretrain', type=str, default= os.path.join(project_dir,'trained_models/pretrain_resnet.pkl'))
+    model_group.add_argument('--effnet_pretrain', type=str, default= os.path.join(project_dir,'/home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val/effnet_cm64_V1_effnet_epoch_2.pkl'))
+
 
     loss_group = parser.add_argument_group(title='loss options')
     # loss settings
@@ -126,6 +128,8 @@ def parse_args(input_args=None):
     eval_group.add_argument('--val_batch_size',default=64,help='valiation batch_size',type=int)
     eval_group.add_argument('--test_interval',default=2000,help='interval iteration between validation',type=int)
     eval_group.add_argument('--fast_eval_iter',type = int,default = -1,help = 'whether to run validation on a few iterations, like 200.')
+    eval_group.add_argument('--fast_eval',type = bool,default = True,help = 'whether to run validation on a few iterations, like 200.')
+
     eval_group.add_argument('--top_n_error_vis', type = int, default = 6, help = 'visulize the top n results during validation')
     eval_group.add_argument('--eval_2dpose',type = bool,default =False)
     eval_group.add_argument('--calc_pck', type = bool, default = False, help = 'whether calculate PCK during evaluation')

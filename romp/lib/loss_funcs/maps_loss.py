@@ -73,7 +73,7 @@ def focal_loss_3D(pred, gt):
     loss[mask] = loss[mask] - (pos_loss[mask] + neg_loss[mask]) / (num_pos[mask]+1e-4)
     return loss.mean(-1)
 
-def make_input(t, requires_grad=False, need_cuda=True):
+def make_input(t, requires_grad=True, need_cuda=True):
     inp = torch.autograd.Variable(t, requires_grad=requires_grad)
     inp = inp.sum()
     if need_cuda:

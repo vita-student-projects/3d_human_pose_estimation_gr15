@@ -60,7 +60,13 @@ class Base(nn.Module):
         return outputs
 
     def feed_forward(self, meta_data):
-        x = self.backbone(meta_data['image'].contiguous().cuda())
+        input_data = meta_data['image'].contiguous().cuda()
+        # print(input_data.requires_grad)
+        # input_data.requires_grad_(True)
+        # print(input_data.requires_grad)
+
+        x = self.backbone(input_data)
+        # print(x.requires_grad)
         outputs = self.head_forward(x)
         return outputs
 

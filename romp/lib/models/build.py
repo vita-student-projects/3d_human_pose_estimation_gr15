@@ -3,11 +3,12 @@ import torch
 import torch.nn as nn
 from config import args
 from models.hrnet_32 import HigherResolutionNet
+from models.efficient_net import EfficientNetRomp
 from models.resnet_50 import ResNet_50
 from models.romp_model import ROMP
 from models.bev_model import BEV
 
-Backbones = {'hrnet': HigherResolutionNet, 'resnet': ResNet_50}
+Backbones = {'hrnet': HigherResolutionNet, 'resnet': ResNet_50, 'effnet': EfficientNetRomp}
 Heads = {1: ROMP, 6:BEV}
 
 

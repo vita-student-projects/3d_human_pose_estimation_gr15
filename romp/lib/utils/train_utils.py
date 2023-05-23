@@ -8,9 +8,6 @@ def justify_detection_state(detection_flag, reorganize_idx):
     if detection_flag.sum() == 0:
         detection_flag = False
     else:
-        print("R", reorganize_idx)
-        print("R", detection_flag)
-        
 
         reorganize_idx = reorganize_idx[detection_flag.bool()].long()
         detection_flag = True
@@ -24,7 +21,6 @@ def copy_state_dict(cur_state_dict, pre_state_dict, prefix = 'module.', drop_pre
         if key in pre_state_dict:
             return pre_state_dict[key]
         return None
-
     for k in cur_state_dict.keys():
         v = _get_params(k)
         try:
