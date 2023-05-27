@@ -4,7 +4,7 @@ ARGS:
  GPUS: 0
  model_version: 1
  
- val_batch_size: 16
+ val_batch_size: 64
  nw_eval: 2
  eval: True
  collision_aware_centermap: False
@@ -14,8 +14,8 @@ ARGS:
  backbone: 'hrnet'
  centermap_size: 64
  centermap_conf_thresh: 0.2
- model_precision: 'fp32'
+ model_precision: 'fp16'
  smpl_mesh_root_align: False
 
  model_path: trained_models/ROMP_HRNet32_V1_ft_3DPW.pkl
- dataset_rootdir: '/media/yusun/Extreme SSD/dataset' #'/path/to/dataset/3DPW'
+ dataset_rootdir: '/media/svenbecker/Data_HDD_Linux/dlav/dataset' #'/path/to/dataset/3DPW'

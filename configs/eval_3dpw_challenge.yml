@@ -18,5 +18,5 @@ ARGS:
  smpl_mesh_root_align: False
 
  model_path: trained_models/ROMP_HRNet32_V1.pkl
- dataset_rootdir: "/media/yusun/Extreme SSD/dataset" #'/path/to/folder that contains 3DPW dataset'
- output_dir: '/media/yusun/Extreme SSD/ROMP/results/' #'/path/to/vibe_db where 3dpw_test_db.pt located'
+ dataset_rootdir: "/media/svenbecker/Data_HDD_Linux/dlav/dataset" #'/path/to/folder that contains 3DPW dataset'
+ output_dir: '/media/svenbecker/Data_HDD_Linux/dlav/results/' #'/path/to/vibe_db where 3dpw_test_db.pt located'

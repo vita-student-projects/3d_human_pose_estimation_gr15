@@ -75,7 +75,7 @@ class Demo(Base):
                     for aname in action_name:
                         if aname in os.path.basename(img_path):
                             mpjpe_cacher[aname].update(float(mpjpe.item()))
-                if test_iter%50==0:
+                if test_iter%2==0:
                     print(test_iter,'/',len(data_loader))
                     print('dataset bias: ', np.array(bias).mean(0))
                     for key,value in mpjpe_cacher.items():

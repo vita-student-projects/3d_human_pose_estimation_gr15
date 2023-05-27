@@ -37,7 +37,7 @@ class  Learnable_Loss(nn.Module):
                     preds_kp3d = outputs['j3d'][kp3d_mask, :kp3d_gt.shape[1]].contiguous()
                     if len(preds_kp3d)>0:
                         loss_dict['PAMPJPE'] = calc_pampjpe(kp3d_gt.contiguous().float(), preds_kp3d.contiguous().float()).mean() * args().PAMPJPE_weight
-                        loss_dict['MPJPE'] = calc_mpjpe(kp3d_gt.contiguous().float(), preds_kp3d.contiguous().float()).mean() * args().MPJPE_weight
+                        # loss_dict['MPJPE'] = calc_mpjpe(kp3d_gt.contiguous().float(), preds_kp3d.contiguous().float()).mean() * args().MPJPE_weight
 
                 except Exception as exp_error:
                     print('PA_MPJPE calculation failed! ll', exp_error)

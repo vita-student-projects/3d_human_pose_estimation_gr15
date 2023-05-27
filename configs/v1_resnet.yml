@@ -1,7 +1,7 @@
 
 ARGS:
  tab: 'V1_effnet' 
- dataset: 'h36m,coco,mpii,muco'
+ dataset: 'h36m,mpiinf,coco,mpii,lsp,muco,crowdpose'
  gpu: 0
  distributed_training: False
  model_version: 1
@@ -9,7 +9,7 @@ ARGS:
 
  master_batch_size: -1
  val_batch_size: 1
- batch_size: 4
+ batch_size: 6
  nw: 4
  nw_eval: 2
  lr: 0.00005
@@ -34,7 +34,7 @@ ARGS:
  centermap_size: 64
  centermap_conf_thresh: 0.2
 
- model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_TRAIN_H36M_MPII_MUCO/effnet_cm64_V1_effnet_epoch_1.pkl
+ model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_TRAIN_EP2/effnet_cm64_V1_effnet_epoch_0.pkl
 
 loss_weight:
   MPJPE: 200.
@@ -47,7 +47,10 @@ loss_weight:
   Cam: 200.
 
 sample_prob:
- muco: 0.7
- coco: 0.1
- h36m: 0.1
+ h36m: 0.2
+ mpiinf: 0.16
+ coco: 0.2
+ lsp: 0.06
  mpii: 0.1
+ muco: 0.14
+ crowdpose: 0.14

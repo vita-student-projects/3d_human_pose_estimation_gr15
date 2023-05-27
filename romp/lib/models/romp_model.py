@@ -29,6 +29,7 @@ class ROMP(Base):
         self._build_head()
         if args().model_return_loss:
             self._calc_loss = Loss()
+
         if not args().fine_tune and not args().eval:
             self.init_weights()
             self.backbone.load_pretrain_params()

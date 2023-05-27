@@ -1,0 +1,22 @@
+ARGS:
+ tab: 'pw3d_test'
+ eval_dataset: 'pw3d_test'
+ GPUS: 0
+ model_version: 1
+ 
+ val_batch_size: 64
+ nw_eval: 2
+ eval: True
+ collision_aware_centermap: False
+ collision_factor: 0.2
+ calc_PVE_error: False
+
+ backbone: 'effnet'
+ centermap_size: 64
+ centermap_conf_thresh: 0.2
+ model_precision: 'fp16'
+ smpl_mesh_root_align: True
+
+ model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val/effnet_cm64_V1_effnet_val_cache.pkl
+ output_dir: /media/svenbecker/Data_HDD_Linux/dlav/results
+ dataset_rootdir: '/media/svenbecker/Data_HDD_Linux/dlav/dataset' #'/path/to/dataset/3DPW'

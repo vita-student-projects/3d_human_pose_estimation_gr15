@@ -1,7 +1,7 @@
 
 ARGS:
  tab: 'effnet' 
- dataset: 'coco,h36m'
+ dataset: 'coco,mpii,h36m'
  gpu: 0
  distributed_training: False
  model_version: 1
@@ -34,7 +34,7 @@ ARGS:
  centermap_size: 64
  centermap_conf_thresh: 0.2
 
- model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_effnet_on_gpu0_val_PRETRAIN_COCO/effnet_cm64_effnet_epoch_1.pkl
+ model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_effnet_on_gpu0_val_PRETRAIN_COCO_COCOMPII_H36M/1_effnet_cm64_effnet.pkl
 
 loss_weight:
   MPJPE: 200.
@@ -47,5 +47,6 @@ loss_weight:
   Cam: 200.
 
 sample_prob:
- coco: 0.2
- h36m: 0.8
+ coco: 0.3
+ mpii: 0.4
+ h36m: 0.3

@@ -3,12 +3,11 @@ ARGS:
  tab: 'webcam'
  gpu: 0 
 
- backbone: 'effnet'
+ backbone: 'resnet'
  model_precision: 'fp16'
  val_batch_size: 1
-#  model_path:   'trained_models/ROMP_ResNet50_V1.pkl'
- model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val/effnet_cm64_V1_effnet_epoch_2.pkl
-
+ model_path:   'trained_models/ROMP_ResNet50_V1.pkl'
+#  model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_TRAIN_EP2/effnet_cm64_V1_effnet_epoch_0.pkl
  save_mesh: False
  save_centermap: False
  save_dict_results: False

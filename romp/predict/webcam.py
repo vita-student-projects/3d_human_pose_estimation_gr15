@@ -72,6 +72,8 @@ class Webcam_processor(Predictor):
                 outputs = self.single_image_forward(frame)
             counter.count()
             #counter.fps()
+            # outputs['detection_flag'] = True
+
 
             if outputs is not None and outputs['detection_flag']:
                 reorganize_idx = outputs['reorganize_idx'].cpu().numpy()
@@ -121,6 +123,11 @@ class Webcam_processor(Predictor):
                 trans = np.array([convert_cam_to_3d_trans(cam).numpy() for cam in cams])
                 poses = np.array([result['poses'] for result in results[frame_id]])
                 betas = np.array([result['betas'] for result in results[frame_id]])
+                poses_print = poses[0].reshape(24, 3)
+                # print("17" , poses_print[17])
+                # print("16" , poses_print[16])
+                # print("\n\n")
+
                 # kp3ds = np.array([result['j3d_smpl24'] for result in results[frame_id]])
                 verts = np.array([result['verts'] for result in results[frame_id]])
                 

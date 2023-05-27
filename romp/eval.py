@@ -110,12 +110,14 @@ def val_result(self, loader_val, evaluation = False, vis_results=False):
 
         ED, kp3d_vis = calc_outputs_evaluation_matrix(
             self, outputs, ED)
-
-        if iter_num % (self.val_batch_size*2) == 0:
-            print('{}/{}'.format(iter_num, len(loader_val)))
+        print(iter_num)
+        if iter_num == 10: break
+        if iter_num % 2 == 0:
+            print('BLU {}/{}'.format(iter_num, len(loader_val)))
             #eval_results = print_results(ED.copy())
             if not evaluation:
                 outputs = self.network_forward(eval_model, meta_data_org, self.val_cfg)
+            
             vis_ids = np.arange(max(min(self.val_batch_size, len(outputs['reorganize_idx'])), 8)//4), None
             save_name = '{}_{}'.format(self.global_count,iter_num)
             for ds_name in set(outputs['meta_data']['data_set']):
@@ -125,7 +127,6 @@ def val_result(self, loader_val, evaluation = False, vis_results=False):
                 show_items.append('j3d')
             self.visualizer.visulize_result(outputs, outputs['meta_data'], show_items=show_items,\
                 vis_cfg={'settings': ['save_img'], 'vids': vis_ids, 'save_dir':self.result_img_dir, 'save_name':save_name}, kp3ds=kp3d_vis) #'org_img', 
-
     print('{} on local_rank {}'.format(['Evaluation' if evaluation else 'Validation'], self.local_rank))
     eval_results = print_results(ED)
 

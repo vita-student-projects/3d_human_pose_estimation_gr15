@@ -102,6 +102,12 @@ class SMPL(nn.Module):
 
 def lbs(betas, pose, v_template, shapedirs, posedirs, J_regressor, parents,
         lbs_weights, dtype=torch.float32):
+    # try:
+    #     print("17" , pose.reshape(24,3)[17])
+    #     print("16" , pose.reshape(24,3)[16])
+    #     print("\n\n")
+    # except:
+    #     print("ERROR")
     ''' Performs Linear Blend Skinning with the given shape and pose parameters
 
         Parameters

@@ -1,6 +1,8 @@
 from dataset.image_base import *
 from dataset.base import Base_Classes, Test_Funcs
 
+import quaternion
+
 default_mode = args().image_loading_mode
 
 def LSP(base_class=default_mode):

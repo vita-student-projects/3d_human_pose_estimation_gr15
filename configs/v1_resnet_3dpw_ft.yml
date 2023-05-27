@@ -8,8 +8,8 @@ ARGS:
  epoch: 1
 
  master_batch_size: -1
- val_batch_size: 64
- batch_size: 64
+ val_batch_size: 2
+ batch_size: 4
  nw: 6
  nw_eval: 2
  lr: 0.00005
@@ -33,11 +33,11 @@ ARGS:
  merge_smpl_camera_head: False
  head_block_num: 2
 
- backbone: 'resnet'
+ backbone: 'effnet'
  centermap_size: 64
  centermap_conf_thresh: 0.2
 
- model_path: trained_models/ROMP_ResNet50_V1.pkl
+ model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_H36M_MPII_MUCO_2/effnet_cm64_V1_effnet_epoch_2.pkl
 
 loss_weight:
   MPJPE: 200.
