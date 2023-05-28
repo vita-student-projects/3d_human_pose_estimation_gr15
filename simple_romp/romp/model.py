@@ -482,12 +482,12 @@ class ROMPv1(nn.Module):
 
 
 def export_model_to_onnx_static():
-    model = ROMPv1().cuda()
+    model = ROMPv1()#.cuda() #i commented
     state_dict = torch.load('/home/yusun/.romp/ROMP.pkl')
     model.load_state_dict(state_dict)
     save_file = '/home/yusun/.romp/ROMP.onnx'
 
-    image = torch.rand(1,512,512,3).cuda()
+    image = torch.rand(1,512,512,3)#.cuda() #i commented
     torch.onnx.export(model, (image),
                       save_file, 
                       input_names=['image'],
@@ -501,7 +501,7 @@ def test_model():
     model = ROMPv1().cuda()
     state_dict = torch.load('/home/yusun/.romp/ROMP.pkl')
     model.load_state_dict(state_dict) #, strict=False
-    outputs = model(torch.rand(1,512,512,3).cuda())
+    outputs = model(torch.rand(1,512,512,3))#.cuda()) #i commented
     for key, value in outputs.items():
         if isinstance(value,tuple):
             print(key, value)

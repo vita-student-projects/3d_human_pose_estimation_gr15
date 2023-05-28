@@ -139,7 +139,7 @@ class ResNet_50(nn.Module):
 
 if __name__ == '__main__':
     args().pretrain = 'spin'
-    model = ResNet_50().cuda()
-    a=model(torch.rand(2,512,512,3).cuda())
+    model = ResNet_50().cpu()
+    a=model(torch.rand(2,512,512,3).cpu())
     for i in a:
         print(i.shape)

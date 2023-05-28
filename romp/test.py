@@ -56,7 +56,7 @@ class Demo(Base):
                 pred_vertices = outputs['verts'].float()
                 J_regressor_batch = J_regressor_h36m[None, :].expand(pred_vertices.shape[0], -1, -1).to(pred_vertices.device)
                 pred_kp3ds = torch.matmul(J_regressor_batch, pred_vertices)
-                gt_kp3ds = meta_data['kp_3d'].cuda()
+                gt_kp3ds = meta_data['kp_3d'].cpu()
                 visible_kpts = (gt_kp3ds[:,:,0]>-2.).float()
                 pred_kp3ds -= pred_kp3ds[:,[0]]
                 gt_kp3ds -= gt_kp3ds[:,[0]]

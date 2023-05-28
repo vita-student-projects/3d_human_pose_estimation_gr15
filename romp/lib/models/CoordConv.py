@@ -104,11 +104,11 @@ class AddCoords(nn.Module):
         xx_channel = xx_channel.repeat(batch_size_tensor, 1, 1, 1)
         yy_channel = yy_channel.repeat(batch_size_tensor, 1, 1, 1)
 
-        out = torch.cat([in_tensor.cuda(), xx_channel.cuda(), yy_channel.cuda()], dim=1)
+        out = torch.cat([in_tensor.cpu(), xx_channel.cpu(), yy_channel.cpu()], dim=1)
 
         if self.radius_channel:
             radius_calc = torch.sqrt(torch.pow(xx_channel - 0.5, 2) + torch.pow(yy_channel - 0.5, 2))
-            out = torch.cat([out, radius_calc], dim=1).cuda()
+            out = torch.cat([out, radius_calc], dim=1).cpu()
 
         return out
 
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     print(y,y.shape)
     y = get_coord_maps(16).repeat(1,2,1,1)
     #print(y,y.shape)
-    coordconv = CoordConv(5, 64, kernel_size=3, stride=2, padding=1, bias=False).cuda()
-    x = torch.rand(2,3,16,16).cuda()
+    coordconv = CoordConv(5, 64, kernel_size=3, stride=2, padding=1, bias=False).cpu()
+    x = torch.rand(2,3,16,16).cpu()
     y = coordconv(x)
     #print(y.shape)

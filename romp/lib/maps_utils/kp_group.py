@@ -289,7 +289,7 @@ if __name__ == '__main__':
     HP = HeatmapParser()
     import cv2
     import torch
-    hp = torch.rand(32,50,128,128).cuda()#torch.from_numpy(cv2.imread('test_sahg.png')[:,:,0]).unsqueeze(0).unsqueeze(0).repeat(2,25,1,1).float()
+    hp = torch.rand(32,50,128,128).cpu()#torch.from_numpy(cv2.imread('test_sahg.png')[:,:,0]).unsqueeze(0).unsqueeze(0).repeat(2,25,1,1).float()
     result = HP.batch_parse(hp,get_best=False)
 
     print(result)

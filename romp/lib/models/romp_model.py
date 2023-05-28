@@ -124,8 +124,8 @@ if __name__ == '__main__':
     args().configs_yml = 'configs/v1.yml'
     args().model_version=1
     from models.build import build_model
-    model = build_model().cuda()
-    outputs=model.feed_forward({'image':torch.rand(4,512,512,3).cuda()})
+    model = build_model().cpu()
+    outputs=model.feed_forward({'image':torch.rand(4,512,512,3).cpu()})
     for key, value in outputs.items():
         if isinstance(value,tuple):
             print(key, value)

@@ -251,8 +251,8 @@ def test_image_relative_dataset(dataset,with_3d=False,with_smpl=False):
 
                 pred_keypoints_2d = perspective_projection(joints,translation=trans,focal_length=args().focal_length, normalize=False)+512//2
    
-                render_img = visualizer.visualize_renderer_verts_list([verts.cuda()], trans=[trans.cuda()], images=image[None])[0]
-                rendered_img_bv = visualizer.visualize_renderer_verts_list([verts.cuda()], trans=[trans.cuda()], bird_view=True, auto_cam=True)[0]
+                render_img = visualizer.visualize_renderer_verts_list([verts.cpu()], trans=[trans.cpu()], images=image[None])[0]
+                rendered_img_bv = visualizer.visualize_renderer_verts_list([verts.cpu()], trans=[trans.cpu()], bird_view=True, auto_cam=True)[0]
                 person_centers = (r['person_centers'][0].numpy() + 1) * img_size / 2.0
                 image = np.array(image).astype(np.uint8)
                 if len(person_centers) == len(trans):
@@ -266,7 +266,7 @@ def test_image_relative_dataset(dataset,with_3d=False,with_smpl=False):
                 cv2.imwrite('{}/mesh_{}.png'.format(save_dir,_), np.concatenate([image, render_img, rendered_img_bv],1)) #image_kp2d_projection_smpl24, image_kp2d_projection_extra30
             else:
                 verts[:,:,2] += 5
-                render_img = visualizer.visualize_renderer_verts_list([verts.cuda()], images=image[None])[0]
+                render_img = visualizer.visualize_renderer_verts_list([verts.cpu()], images=image[None])[0]
                 cv2.imwrite('{}/mesh_{}.png'.format(save_dir,_), render_img)
         j3ds = r['kp_3d'][0,0]
         image = r['image'][0].numpy().astype(np.uint8)[:,:,::-1]

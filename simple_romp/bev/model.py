@@ -250,7 +250,7 @@ class BEVv1(nn.Module):
         return output
 
 def export_model_to_onnx_static():
-    model = BEVv1().cuda()
+    model = BEVv1().cpu()
     state_dict = torch.load('/home/yusun/CenterMesh/trained_models/BEV_review.pth')
     model.load_state_dict(state_dict, strict=False)
     save_file = '/home/yusun/ROMP/trained_models/BEV.onnx'
@@ -258,7 +258,7 @@ def export_model_to_onnx_static():
     import cv2
     image = cv2.imread('/home/yusun/CenterMesh/simple_romp/test/ages.png')[400:]
     image = cv2.resize(cv2.cvtColor(image, cv2.COLOR_BGR2RGB), (512,512))
-    image = torch.from_numpy(image)[None].cuda().float()
+    image = torch.from_numpy(image)[None].cpu().float()
     torch.onnx.export(model, (image),
                       save_file, 
                       input_names=['image'],

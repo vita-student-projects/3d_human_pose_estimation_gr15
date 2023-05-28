@@ -13,7 +13,7 @@ class Trainer(Base):
         self._build_model_()
         self._build_optimizer()
         self.set_up_validation()
-        self.mutli_task_uncertainty_weighted_loss = Learnable_Loss().cuda()
+        self.mutli_task_uncertainty_weighted_loss = Learnable_Loss().cpu()
         self.optimizer.add_param_group({'params': self.mutli_task_uncertainty_weighted_loss.parameters()})
         self.loader = self._create_data_loader(train_flag=True)
         if args().learn_2dpose or args().learn_AE:

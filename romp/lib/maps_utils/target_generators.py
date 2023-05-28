@@ -57,7 +57,7 @@ class HeatmapGenerator():
         heatmaps = []
         for joints in batch_joints:
             heatmaps.append(torch.from_numpy(self.single_process(joints)))
-        return torch.stack(heatmaps).cuda()
+        return torch.stack(heatmaps).cpu()
 
 
 class ScaleAwareHeatmapGenerator():
@@ -131,7 +131,7 @@ class JointsGenerator():
         joints_processed = []
         for joints in batch_joints:
             joints_processed.append(self.single_process(joints))
-        return torch.from_numpy(np.array(joints_processed)).long().cuda()
+        return torch.from_numpy(np.array(joints_processed)).long().cpu()
 
 if __name__ == '__main__':
     num_joints = 17
@@ -139,7 +139,7 @@ if __name__ == '__main__':
     if 1:
         hg = HeatmapGenerator(output_res,num_joints)
 
-        x = torch.rand(1,num_joints,2).cuda()*2-1
+        x = torch.rand(1,num_joints,2).cpu()*2-1
         x[0,:2] = -2.
         heatmaps = hg.batch_process(x)
         imgs = heatmaps[0].cpu().numpy()
@@ -149,7 +149,7 @@ if __name__ == '__main__':
             cv2.imwrite('test_heatmaps{}.png'.format(idx), (img[:,:,np.newaxis]*255).astype(np.uint8))
     else:
         jg = JointsGenerator(1,num_joints,output_res,True)
-        x = torch.rand(1,num_joints,2).cuda()*2-1
+        x = torch.rand(1,num_joints,2).cpu()*2-1
         x[0,:10] = -2.
         print(x)
         results = jg.batch_process(x)

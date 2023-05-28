@@ -221,7 +221,7 @@ blocks_dict = {
 
 
 if __name__ == '__main__':
-    model = HigherResolutionNet().cuda()
-    a=model(torch.rand(2,512,512,3).cuda())
+    model = HigherResolutionNet().cpu()
+    a=model(torch.rand(2,512,512,3).cpu())
     for i in a:
         print(i.shape)

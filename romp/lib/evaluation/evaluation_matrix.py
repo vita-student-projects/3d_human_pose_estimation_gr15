@@ -10,7 +10,7 @@ from smplx import SMPL
 def _calc_matched_PCKh_(real, pred, kp2d_mask, error_thresh=0.143):
     # error_thresh is set as the ratio between the head and the body.
     # he head / body for normal people are between 6~8, therefore, we set it to 1/7=0.143
-    PCKs = torch.ones(len(kp2d_mask)).float().cuda()*-1.
+    PCKs = torch.ones(len(kp2d_mask)).float().cpu()*-1.
     if kp2d_mask.sum()>0:
         vis = (real>-1.).sum(-1)==real.shape[-1]
         error = torch.norm(real-pred, p=2, dim=-1)

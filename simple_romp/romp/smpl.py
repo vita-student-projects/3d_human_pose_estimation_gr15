@@ -291,8 +291,8 @@ def batch_rigid_transform(rot_mats, joints, parents, dtype=torch.float32):
 
 def export_smpl_to_onnx_dynamic(smpl_model, save_file, bs=1):
     "support dynamics batch size but slow"
-    a = torch.rand([bs, 10]).cuda()
-    b = torch.rand([bs, 72]).cuda()
+    a = torch.rand([bs, 10])#.cuda() #i commented
+    b = torch.rand([bs, 72])#.cuda() #i commented
     dynamic_axes = {'smpl_betas':[0], 'smpl_thetas':[0], 'verts':[0], 'joints':[0]}
     torch.onnx.export(smpl_model, (a, b),
                       save_file, 
@@ -306,8 +306,8 @@ def export_smpl_to_onnx_dynamic(smpl_model, save_file, bs=1):
 
 def export_smpl_to_onnx_static(smpl_model, save_file, bs=1):
     
-    a = torch.rand([bs, 10]).cuda()
-    b = torch.rand([bs, 72]).cuda()
+    a = torch.rand([bs, 10])#.cuda() #i commented
+    b = torch.rand([bs, 72])#.cuda() #i commented
     torch.onnx.export(smpl_model, (a, b),
                       save_file, 
                       input_names=['smpl_betas', 'smpl_thetas'],

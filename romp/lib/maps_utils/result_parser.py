@@ -56,11 +56,11 @@ class ResultParser(nn.Module):
     
     def determine_detection_flag(self, outputs, meta_data):
         detected_ids = torch.unique(outputs['reorganize_idx'])
-        detection_flag = torch.Tensor([batch_id in detected_ids for batch_id in meta_data['batch_ids']]).cuda()
+        detection_flag = torch.Tensor([batch_id in detected_ids for batch_id in meta_data['batch_ids']]).cpu()
         return detection_flag
 
     def process_reorganize_idx_data_parallel(self,outputs):
-        gpu_num = torch.cuda.device_count()
+        gpu_num = torch.device_count()
         current_device_id = outputs['params_maps'].device.index
         data_size = outputs['params_maps'].shape[0]
         outputs['reorganize_idx'] += data_size*current_device_id
@@ -203,12 +203,12 @@ class ResultParser(nn.Module):
         if len(batch_ids)==0:
             if 'new_training' in cfg:
                 if cfg['new_training']:
-                    outputs['detection_flag'] = torch.Tensor([False for _ in range(len(meta_data['batch_ids']))]).cuda()
-                    outputs['reorganize_idx'] = meta_data['batch_ids'].cuda()
+                    outputs['detection_flag'] = torch.Tensor([False for _ in range(len(meta_data['batch_ids']))]).cpu()
+                    outputs['reorganize_idx'] = meta_data['batch_ids'].cpu()
                     return outputs, meta_data
             batch_ids, flat_inds = torch.zeros(1).long().to(outputs['center_map'].device), (torch.ones(1)*self.map_size**2/2.).to(outputs['center_map'].device).long()
             person_ids = batch_ids.clone()
-        outputs['detection_flag'] = torch.Tensor([True for _ in range(len(batch_ids))]).cuda()
+        outputs['detection_flag'] = torch.Tensor([True for _ in range(len(batch_ids))]).cpu()
         
         if 'params_maps' in outputs and 'params_pred' not in outputs:
             outputs['params_pred'] = self.parameter_sampling(outputs['params_maps'], batch_ids, flat_inds, use_transform=True)
@@ -272,7 +272,7 @@ class ResultParser(nn.Module):
         
             if len(batch_ids)==0:
                 batch_ids, flat_inds, cyxs, top_score = self.centermap_parser.parse_centermap_heatmap_adaptive_scale_batch(outputs['center_map'], top_n_people=1)
-                outputs['detection_flag'] = torch.Tensor([False for _ in range(len(batch_ids))]).cuda()
+                outputs['detection_flag'] = torch.Tensor([False for _ in range(len(batch_ids))]).cpu()
 
             outputs['centers_pred'] = torch.stack([flat_inds%args().centermap_size, torch.div(flat_inds, args().centermap_size, rounding_mode='floor')], 1)
             outputs['centers_conf'] = self.parameter_sampling(outputs['center_map'], batch_ids, flat_inds, use_transform=True)

@@ -60,7 +60,7 @@ class Base(nn.Module):
         return outputs
 
     def feed_forward(self, meta_data):
-        x = self.backbone(meta_data['image'].contiguous().cuda())
+        x = self.backbone(meta_data['image'].contiguous().cpu())
         outputs = self.head_forward(x)
         return outputs
 

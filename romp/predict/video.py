@@ -116,7 +116,7 @@ class Video_processor(Image_processor):
 
                 # update the vertices
                 for item in item_names:
-                    params_dict_new[item] = torch.stack(params_dict_new[item]).cuda()
+                    params_dict_new[item] = torch.stack(params_dict_new[item]).cpu()
                 outputs['meta_data']['offsets'] = outputs['meta_data']['offsets'][to_org_inds][reorganize_idx_new]
                 with autocast():
                     outputs.update(self.model.module._result_parser.params_map_parser.recalc_outputs(params_dict_new, outputs['meta_data']))

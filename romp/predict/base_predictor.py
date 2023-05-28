@@ -43,7 +43,7 @@ class Predictor(Base):
     def single_image_forward(self,image):
         meta_data = img_preprocess(image, '0', input_size=args().input_size, single_img_input=True)
         if '-1' not in self.gpus:
-            meta_data['image'] = meta_data['image'].cuda()
+            meta_data['image'] = meta_data['image'].cpu()
         outputs = self.net_forward(meta_data, cfg=self.demo_cfg)
         return outputs
 
@@ -54,7 +54,7 @@ class Predictor(Base):
         smpl_pose_results = outputs['params']['poses'].detach().cpu().numpy().astype(np.float16)
         smpl_shape_results = outputs['params']['betas'].detach().cpu().numpy().astype(np.float16)
         joints_54 = outputs['j3d'].detach().cpu().numpy().astype(np.float16)
-        # kp3d_smpl24_results = outputs['joints_smpl24'].detach().cpu().numpy().astype(np.float16)
+        #kp3d_smpl24_results = outputs['joints_smpl24'].detach().cpu().numpy().astype(np.float16)
         kp3d_spin24_results = joints_54[:,constants.joint_mapping(constants.SMPL_ALL_54, constants.SPIN_24)]
         kp3d_op25_results = joints_54[:,constants.joint_mapping(constants.SMPL_ALL_54, constants.OpenPose_25)]
         verts_results = outputs['verts'].detach().cpu().numpy().astype(np.float16)
@@ -74,7 +74,7 @@ class Predictor(Base):
                 results[img_path][subject_idx]['betas'] = smpl_shape_results[batch_idx]
                 results[img_path][subject_idx]['j3d_all54'] = joints_54[batch_idx]
                 # print(results[img_path][subject_idx]['j3d_all54'])
-                # results[img_path][subject_idx]['j3d_smpl24'] = kp3d_smpl24_results[batch_idx]
+                #results[img_path][subject_idx]['j3d_smpl24'] = kp3d_smpl24_results[batch_idx]
                 results[img_path][subject_idx]['j3d_spin24'] = kp3d_spin24_results[batch_idx]
                 results[img_path][subject_idx]['j3d_op25'] = kp3d_op25_results[batch_idx]
                 results[img_path][subject_idx]['verts'] = verts_results[batch_idx]

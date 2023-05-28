@@ -1,5 +1,6 @@
 import open3d as o3d
 import numpy as np
+import json
 
 import config
 import constants
@@ -8,11 +9,37 @@ from utils.temporal_optimization import OneEuroFilter
 from visualization.create_meshes import create_body_mesh, create_body_model
 
 
+
+
 def convert_trans_scale(trans):
     trans *= np.array([0.4, 0.6, 0.7])
     return trans
 
+def extract_keypoints(coords):
+    joint_indices = [0, 2, 5, 11, 1, 4, 10, 3, 6, 24, 53, 16, 18, 20, 17, 19, 21]
+    extracted_coords = coords[joint_indices]
+    return extracted_coords
+
+def get_num_frames_from_json():
+    try:
+        with open('keypoints.json', 'r') as f:
+            data = json.load(f)
+        return len(data)
+    except FileNotFoundError:
+        return 0
+
+def write_keypoints_to_json(keypoints):
+    try:
+        with open('keypoints.json', 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = []
+    data.append({"frame": get_num_frames_from_json()+1, "keypoints": keypoints.flatten().tolist()})
+    with open('keypoints.json', 'w') as f:
+        json.dump(data, f)
+
 class Open3d_visualizer(object):
+    #frame_number = 0
     def __init__(self, multi_mode=False):
         self.window_size = np.array([1280,1080])
         #self.window_size = np.array([720,720])
@@ -75,6 +102,15 @@ class Open3d_visualizer(object):
         mesh_ob.vertices = o3d.utility.Vector3dVector(verts)
         mesh_ob.compute_triangle_normals()
         mesh_ob.compute_vertex_normals()
+
+        # Extract keypoints
+        extracted_coords = extract_keypoints(verts)
+        #frame_number = frame_number + 1
+
+        # Write keypoints to JSON file
+        write_keypoints_to_json(extracted_coords)
+        print(verts)
+
         self.viewer.update_geometry(mesh_ob)
 
     def run(self, verts, trans=None):

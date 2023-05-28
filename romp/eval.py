@@ -9,7 +9,7 @@ from evaluation.evaluation_matrix import _calc_relative_age_error_weak_, _calc_a
 def calc_outputs_evaluation_matrix(self, outputs, ED):
     for ds in set(outputs['meta_data']['data_set']):
         val_idx = np.where(np.array(outputs['meta_data']['data_set']) == ds)[0]
-        real_3d = outputs['meta_data']['kp_3d'][val_idx].contiguous().cuda()
+        real_3d = outputs['meta_data']['kp_3d'][val_idx].contiguous().cpu()
         if ds in constants.dataset_smpl2lsp:
             real_3d = real_3d[:, self.All54_to_LSP14_mapper].contiguous()
             if (self.All54_to_LSP14_mapper == -1).sum() > 0:
@@ -78,7 +78,7 @@ def calc_outputs_evaluation_matrix(self, outputs, ED):
                 ED['PCK3D'][ds].append((mpjpe_pck_batch.reshape(-1) < self.PCK_thresh).astype(np.float32)*100)
                 if ds in constants.MPJAE_ds:
                     rel_pose_pred = torch.cat([outputs['params']['global_orient'][val_idx], outputs['params']['body_pose'][val_idx]], 1)[:, :22*3].contiguous()
-                    rel_pose_real = outputs['meta_data']['params'][val_idx, :22*3].cuda()
+                    rel_pose_real = outputs['meta_data']['params'][val_idx, :22*3].cpu()
                     MPJAE_error = _calc_MPJAE(rel_pose_pred, rel_pose_real)
                     ED['MPJAE'][ds].append(MPJAE_error)
 

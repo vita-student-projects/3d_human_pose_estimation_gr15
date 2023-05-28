@@ -47,8 +47,8 @@ class Base(object):
                 train_entire_model(model)
         if self.distributed_training:
             print('local_rank', self.local_rank)
-            device = torch.device('cuda', self.local_rank)
-            torch.cuda.set_device(self.local_rank)
+            device = torch.device('cpu', self.local_rank)
+            torch.set_device(self.local_rank)
             model = torch.nn.SyncBatchNorm.convert_sync_batchnorm(model)
             torch.distributed.init_process_group(backend='nccl')
             assert torch.distributed.is_initialized()
@@ -56,9 +56,9 @@ class Base(object):
         else:
             if self.master_batch_size!=-1:
                 # balance the multi-GPU memory via adjusting the batch size of each GPU.
-                self.model = DataParallel(model.cuda(), device_ids=self.gpus, chunk_sizes=self.chunk_sizes)
+                self.model = DataParallel(model.cpu(), device_ids=self.gpus, chunk_sizes=self.chunk_sizes)
             else:
-                self.model = nn.DataParallel(model.cuda())
+                self.model = nn.DataParallel(model.cpu())
 
     def _build_optimizer(self):
         if self.optimizer_type=='Adam':

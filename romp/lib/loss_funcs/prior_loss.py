@@ -21,9 +21,9 @@ class Interperlation_penalty(nn.Module):
 
         self.pen_distance = collisions_loss.DistanceFieldPenetrationLoss(
             sigma=df_cone_height, point2plane=point2plane,
-            vectorized=True, penalize_outside=penalize_outside).cuda()
+            vectorized=True, penalize_outside=penalize_outside).cpu()
         self.coll_loss_weight = 1.0
-        self.search_tree = BVH(max_collisions=max_collisions).cuda()
+        self.search_tree = BVH(max_collisions=max_collisions).cpu()
         self.body_model_faces = faces_tensor
 
         if part_segm_fn:
@@ -36,7 +36,7 @@ class Interperlation_penalty(nn.Module):
             faces_parents = face_segm_data['parents']
             # Create the module used to filter invalid collision pairs
             self.tri_filtering_module = FilterFaces(
-                faces_segm=faces_segm, faces_parents=faces_parents).cuda()
+                faces_segm=faces_segm, faces_parents=faces_parents).cpu()
     def forward(self,vertices):
         pen_loss = 0.0
         # Calculate the loss due to interpenetration

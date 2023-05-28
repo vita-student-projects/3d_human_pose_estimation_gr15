@@ -12,7 +12,7 @@ class Trainer(Base):
         self.set_up_val_loader()
         self._calc_loss = Loss()
         self.loader = self._create_data_loader(train_flag=True)
-        self.merge_losses = Learnable_Loss(self.loader.dataset._get_ID_num_()).cuda()
+        self.merge_losses = Learnable_Loss(self.loader.dataset._get_ID_num_()).cpu()
         
         self.train_cfg = {'mode':'matching_gts', 'is_training':True, 'update_data': True, 'calc_loss': True if self.model_return_loss else False, \
                             'with_nms':False, 'with_2d_matching':True, 'new_training': args().new_training}

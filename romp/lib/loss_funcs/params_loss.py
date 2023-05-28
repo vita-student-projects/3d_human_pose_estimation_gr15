@@ -56,7 +56,7 @@ def trans_relative_rot_to_global_rotmat(params, with_global_rot=False):
             results.append(glob_transf_mat)
     else:
         sellect_joints = np.array([1,2,4,5,16,17,18,19],dtype=int)-1
-        results = [torch.eye(3,3)[None].cuda().repeat(batch_size,1,1)]
+        results = [torch.eye(3,3)[None].cpu().repeat(batch_size,1,1)]
         for i_val in range(param_num-1):
             #i_val = int(idx + 1)
             joint_rot = pose_rotmat[:, i_val]

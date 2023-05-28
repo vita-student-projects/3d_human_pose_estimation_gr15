@@ -533,11 +533,11 @@ def batch_global_rigid_transformation(Rs, Js, parent, rotate_base = False,root_r
     if rotate_base:
         np_rot_x = np.array([[1, 0, 0], [0, -1, 0], [0, 0, -1]], dtype = float)
         np_rot_x = np.reshape(np.tile(np_rot_x, [N, 1]), [N, 3, 3])
-        rot_x = torch.from_numpy(np_rot_x).float().cuda()
+        rot_x = torch.from_numpy(np_rot_x).float().cpu()
         root_rotation = torch.matmul(Rs[:, 0, :, :],  rot_x)
     elif root_rot_mat is not None:
         np_rot_x = np.reshape(np.tile(root_rot_mat, [N, 1]), [N, 3, 3])
-        rot_x =torch.from_numpy(np_rot_x).float().cuda()
+        rot_x =torch.from_numpy(np_rot_x).float().cpu()
         root_rotation = torch.matmul(Rs[:, 0, :, :],  rot_x)
     else:
         root_rotation = Rs[:, 0, :, :]
@@ -545,7 +545,7 @@ def batch_global_rigid_transformation(Rs, Js, parent, rotate_base = False,root_r
 
     def make_A(R, t):
         R_homo = F.pad(R, [0, 0, 0, 1, 0, 0])
-        t_homo = torch.cat([t, torch.ones(N, 1, 1).cuda()], dim = 1)
+        t_homo = torch.cat([t, torch.ones(N, 1, 1).cpu()], dim = 1)
         return torch.cat([R_homo, t_homo], 2)
 
     A0 = make_A(root_rotation, Js[:, 0])
@@ -561,7 +561,7 @@ def batch_global_rigid_transformation(Rs, Js, parent, rotate_base = False,root_r
 
     new_J = results[:, :, :3, 3]
     #print('result',results)
-    Js_w0 = torch.cat([Js, torch.zeros(N, 24, 1, 1).cuda()], dim = 2)
+    Js_w0 = torch.cat([Js, torch.zeros(N, 24, 1, 1).cpu()], dim = 2)
     #print('js w ',Js_w0)
     init_bone = torch.matmul(results, Js_w0)
     #print('init_bone before padded',init_bone)

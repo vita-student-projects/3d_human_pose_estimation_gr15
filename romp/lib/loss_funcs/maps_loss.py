@@ -77,7 +77,7 @@ def make_input(t, requires_grad=False, need_cuda=True):
     inp = torch.autograd.Variable(t, requires_grad=requires_grad)
     inp = inp.sum()
     if need_cuda:
-        inp = inp.cuda()
+        inp = inp.cpu()
     return inp
 
 
@@ -255,10 +255,10 @@ if __name__ == '__main__':
     output_res = 128
     hg = HeatmapGenerator(output_res,num_joints)
 
-    x = torch.rand(2,num_joints,2).cuda()*2-1
+    x = torch.rand(2,num_joints,2).cpu()*2-1
     x[0,:2] = -2.
     heatmaps = hg.batch_process(x)
     print(heatmaps)
-    loss = focal_loss(torch.sigmoid(heatmaps+torch.rand(1,25,128,128).cuda()),heatmaps)
+    loss = focal_loss(torch.sigmoid(heatmaps+torch.rand(1,25,128,128).cpu()),heatmaps)
     print(loss)
     #test_ae_loss()

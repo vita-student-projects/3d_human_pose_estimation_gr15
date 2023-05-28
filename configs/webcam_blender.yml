@@ -1,7 +1,7 @@
 
 ARGS:
  tab: 'webcam'
- gpu: 0 
+ gpu: -1 
 
  backbone: 'hrnet'
  model_precision: 'fp32'

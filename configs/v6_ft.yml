@@ -2,7 +2,7 @@ ARGS:
  tab: 'V6_hrnet_relative_train'
  dataset: h36m,muco,coco,lsp,agora,pw3d,relative_human,posetrack
  eval_datasets: 'relative,agora'
- gpu: 0
+ gpu: -1
  distributed_training: False
  model_version: 6
  centermap_size: 128

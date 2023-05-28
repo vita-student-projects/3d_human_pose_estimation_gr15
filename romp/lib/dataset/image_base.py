@@ -696,15 +696,15 @@ def test_image_dataset(dataset,with_3d=False,with_smpl=False):
                     trans = r['root_trans'][0][valid_mask]
                 pred_keypoints_2d = perspective_projection(joints,translation=trans,focal_length=args().focal_length, normalize=False)+512//2
    
-                render_img = visualizer.visualize_renderer_verts_list([verts.cuda()], trans=[trans.cuda()], images=image[None])[0]
+                render_img = visualizer.visualize_renderer_verts_list([verts.cpu()], trans=[trans.cpu()], images=image[None])[0]
                 image_kp2d_projection_smpl24 = draw_skeleton_multiperson(render_img.copy(), pred_keypoints_2d, bones=bones[:23], cm=cm[:23], label_kp_order=True)
                 image_kp2d_projection_extra30 = draw_skeleton_multiperson(render_img.copy(), pred_keypoints_2d, bones=bones[23:], cm=cm[23:], label_kp_order=True)
                 #cv2.imwrite('{}/op25_regressed_{}.jpg'.format(save_dir,_), image_kp2d_projection)
-                rendered_img_bv = visualizer.visualize_renderer_verts_list([verts.cuda()], trans=[trans.cuda()], bird_view=True, auto_cam=True)[0]
+                rendered_img_bv = visualizer.visualize_renderer_verts_list([verts.cpu()], trans=[trans.cpu()], bird_view=True, auto_cam=True)[0]
                 cv2.imwrite('{}/mesh_{}.png'.format(save_dir,_), np.concatenate([render_img, rendered_img_bv, image_kp2d_projection_smpl24, image_kp2d_projection_extra30],1))
             else:
                 verts[:,:,2] += 2
-                render_img = visualizer.visualize_renderer_verts_list([verts.cuda()], images=image[None])[0]
+                render_img = visualizer.visualize_renderer_verts_list([verts.cpu()], images=image[None])[0]
                 cv2.imwrite('{}/mesh_{}.png'.format(save_dir,_), render_img)
         j3ds = r['kp_3d'][0,0]
         image = r['image_org'][0].numpy().astype(np.uint8)[:,:,::-1]

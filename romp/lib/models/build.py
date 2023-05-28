@@ -26,7 +26,7 @@ def build_model():
 
 if __name__ == '__main__':
     net = build_model()
-    nx = torch.rand(4,512,512,3).float().cuda()
+    nx = torch.rand(4,512,512,3).float().cpu()
     y = net(nx)
     
     for idx, item in enumerate(y):

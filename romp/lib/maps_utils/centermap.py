@@ -449,7 +449,7 @@ def test_centermaps():
     centermaps = []
     for i in range(batch_size):
         centermaps.append(torch.from_numpy(CM.generate_centermap(center_locs,bboxes_hw_norm=bboxes)))
-    centermaps = torch.stack(centermaps).cuda()
+    centermaps = torch.stack(centermaps).cpu()
     print_matrix(centermaps[0,0])
     print('__'*10)
     results = CM.parse_centermap_heatmap_adaptive_scale_batch(centermaps)

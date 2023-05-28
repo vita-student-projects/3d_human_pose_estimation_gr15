@@ -121,8 +121,8 @@ class Webcam_processor(Predictor):
                 trans = np.array([convert_cam_to_3d_trans(cam).numpy() for cam in cams])
                 poses = np.array([result['poses'] for result in results[frame_id]])
                 betas = np.array([result['betas'] for result in results[frame_id]])
-                # kp3ds = np.array([result['j3d_smpl24'] for result in results[frame_id]])
-                verts = np.array([result['verts'] for result in results[frame_id]])
+                verts = np.array([result['j3d_all54'] for result in results[frame_id]])
+                #verts = np.array([result['verts'] for result in results[frame_id]])
                 
                 if self.visulize_platform == 'vis_server':
                     RS.send_results(poses=poses, betas=betas, trans=trans, ids=tracked_ids)
