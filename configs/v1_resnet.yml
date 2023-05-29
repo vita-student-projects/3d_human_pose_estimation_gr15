@@ -34,8 +34,7 @@ ARGS:
  centermap_size: 64
  centermap_conf_thresh: 0.2
 
- model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_TRAIN_EP2/effnet_cm64_V1_effnet_epoch_0.pkl
-
+ model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_TRAIN_EP2_dot_5/effnet_cm64_V1_effnet_val_cache.pkl
 loss_weight:
   MPJPE: 200.
   PAMPJPE: 360.

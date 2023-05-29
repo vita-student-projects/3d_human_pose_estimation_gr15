@@ -107,7 +107,7 @@ def parse_args(input_args=None):
     model_group.add_argument('--use_coordmaps',type = bool,default = True,help = 'use the coordmaps')
     model_group.add_argument('--hrnet_pretrain', type=str, default= os.path.join(project_dir,'trained_models/pretrain_hrnet.pkl'))
     model_group.add_argument('--resnet_pretrain', type=str, default= os.path.join(project_dir,'trained_models/pretrain_resnet.pkl'))
-    model_group.add_argument('--effnet_pretrain', type=str, default= os.path.join(project_dir,'/home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_TRAIN_EP2/effnet_cm64_V1_effnet_epoch_0.pkl'))
+    model_group.add_argument('--effnet_pretrain', type=str, default= os.path.join(project_dir,'/home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_TRAIN_EP5_dot_7/effnet_cm64_V1_effnet_val_cache.pkl'))
 
 
     loss_group = parser.add_argument_group(title='loss options')

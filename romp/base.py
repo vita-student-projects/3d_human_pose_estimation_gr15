@@ -46,6 +46,8 @@ class Base(object):
                 model = load_model(self.model_path, model, prefix = '', drop_prefix=drop_prefix, fix_loaded=False) 
                 # model = load_model(self.model_path, model, prefix = 'module.', drop_prefix=drop_prefix, fix_loaded=False) 
                 train_entire_model(model)
+        model = load_model(self.model_path, model, prefix = '', drop_prefix="", fix_loaded=False) 
+        
         if self.distributed_training:
             print('local_rank', self.local_rank)
             device = torch.device('cuda', self.local_rank)
