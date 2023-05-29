@@ -1,104 +1,42 @@
-<h2 align="center"> Monocular, One-stage, Regression of Multiple 3D People </h2>
+# ROMP - Monocular, One-stage, Regression of Multiple 3D People
 
-| <div align=center><img src="../assets/demo/ROMP_logo.png" width="30%" /></div> | <div align=center><img src="../assets/demo/BEV_logo.png" width="30%" /></div> |
-| :---: | :---: |
-| ROMP is a **one-stage** method for monocular multi-person 3D mesh recovery in **real time**. | BEV further explores multi-person **depth relationships** and supports **all age groups**.  |
-| **[[Paper]](https://arxiv.org/abs/2008.12272) [[Video]](https://www.youtube.com/watch?v=hunBPJxnyBU)** | **[[Project Page]](https://arthur151.github.io/BEV/BEV.html) [[Paper]](https://arxiv.org/abs/2112.08274) [[Video]](https://youtu.be/Q62fj_6AxRI) [[RH Dataset]](https://github.com/Arthur151/Relative_Human)** |
-<img src="../assets/demo/animation/blender_character_driven-min.gif" alt="drawing" width="500"/> | <img src="../assets/demo/images_results/BEV_tennis_results.png" alt="drawing" width="340"/>
+ROMP is a one-stage 3D pose estimator of humans. The working principle can be summarized as follows: For each detected human in a scene, the network predicts:
+- Parameterized Mesh to describe the joint-angles and limb expansion (in SMPL format)
+- Pose of human in current image frame (i.e. how a mesh-rendering has to be scaled, rotated or translated to oberlap the detected human in the scene)
 
-We provide **cross-platform API** (installed via pip) to run ROMP & BEV on Linux / Windows / Mac. 
+This principle is explained in great detail in their original publication [^1]. In [^2], we give a more compact explanation and we compare ROMP against other state-of-the-art state estimators for our specific AV application. Our project implementation is based on their original GitHub repository [^3]. Their original ReadMe is [here](README_orig.md).
+
+## Contribution
+
+As proposed in [^2], our main contribution is the replacement of their backbone with a smaller architecture in order to reduce the computational load of the AV embedded computer. This means that we modify the deeper layers of the network. Our approach is motivated by the fact that the backbones implemented by [^1] carry ~60 times more parameters than the Head (as shown in the table at the end of this section). More recent pose estimators analyzed in [^2] - especially [^4] - experience good performance by using the EfficientNet architecture. Since this structure promises similar performance using less parameters, we use this architecture to reduce the compute load. 
+
+![contrib_overview](docs/contribution/overview.png)
+
+The specific network architecture we chose is the most recent EfficientNetV2-S which is conveniently available in `pytorch`. For the direct implementation, we took their ResNet-50 as a blueprint (bottom figure left). Since the backbone is the feature extractor in the ROMP application, we do not require the classifier layers. We copy their deconvolution layer-structure to generate the same output layers as before. As the EfficientNet's output-shape differs slightly from the ResNet's, we apply slightly different deconvolution shapes in our contribution. This is summarized here:
+![contrib_detail](docs/contribution/resnet_effnet.png)
+
+This implementation cuts the number of parameters in the backbone by 18% and 28% compared to the HRNet-50 and ResNet-50 respectively. We implemented our contribution in order to fit in the original framework such that training, evaluation, and dataset handling can be overtaken directly.
+
+| Component  | # of Parameters  |
+|---|---|
+| HRNet-32 backbone (in [^1])  | 28,535,552  |
+| ResNet-50 backbone (in [^1])  | 32,552,896  |
+| EfficientNetV2-S backbone (our contribution)  |  23,496,592 |
+| Head  |  568,018 |
+
+Due to the complexity and bugs of their code, we did not implement our second idea of testing an additional loss term.
+
+## Dataset
+
+All relevant datasets as well as the annotations were made available by the authors of [^1] via a [Google-drive folder](https://drive.google.com/drive/folders/1_g4AbXumhufs7YPdTAK3kFMnTQJYs3w3). They also include instructions on the directory structure such that the files can be processed by their code framework [^3] without any problem. See [this page](docs/dataset.md) for the specific procedure. Depending on the dataset location, one must adapt `dataset_rootdir` in the [config.py](romp/lib/config.py).
 
 
-## Table of contents
-- [Table of contents](#table-of-contents)
-- [News](#news)
-- [Getting started](#getting-started)
-  - [Installation](#installation)
-  - [Try on Google Colab](#try-on-google-colab)
-- [How to use it](#how-to-use-it)
-    - [Please refer to this guidance for inference & export (fbx/glb/bvh).](#please-refer-to-this-guidance-for-inference--export-fbxglbbvh)
-  - [Train](#train)
-  - [Evaluation](#evaluation)
-  - [Docker usage](#docker-usage)
-  - [Bugs report](#bugs-report)
-- [Citation](#citation)
-- [Acknowledgement](#acknowledgement)
 
-## News
-*2022/06/21: Training & evaluation code of BEV is released. Please update the [model_data](https://github.com/Arthur151/ROMP/releases/download/v1.1/model_data.zip).*   
-*2022/05/16: simple-romp v1.0 is released to support tracking, calling in python, exporting bvh, and etc.*   
-*2022/04/14: Inference code of BEV has been released in simple-romp v0.1.0.*   
-*2022/04/10: Adding onnx support, with faster inference speed on CPU/GPU.*   
-[Old logs](docs/updates.md)
+# Experimental Setup
 
-## Getting started
 
-Please use simple-romp for inference, the rest code is just for training.
-
-### Installation
-```
-pip install --upgrade setuptools numpy cython
-pip install --upgrade simple-romp
-```
-For more details, please refer to [install.md](https://github.com/Arthur151/ROMP/blob/master/simple_romp/README.md).
-
-## How to use it
-
-#### Please refer to [this guidance](https://github.com/Arthur151/ROMP/blob/master/simple_romp/README.md) for inference & export (fbx/glb/bvh).
-
-### Train
-For training, please refer to [installation.md](docs/installation.md) for full installation.
-Please prepare the training datasets following [dataset.md](docs/dataset.md), and then refer to [train.md](docs/train.md) for training. 
-
-### Evaluation
-
-Please refer to [romp_evaluation.md](docs/romp_evaluation.md) and [bev_evaluation.md](docs/bev_evaluation.md) for evaluation on benchmarks.
-
-### Extensions
-
-[[Blender addon]](https://github.com/yanchxx/CDBA): [Yan Chuanhang](https://github.com/yanchxx) created a Blender-addon to drive a 3D character in Blender using ROMP from image, video or webcam input.
-
-[[VMC protocol]](https://codeberg.org/vivi90/vmcps): [Vivien Richter](https://github.com/vivi90) implemented a VMC (Virtual Motion Capture) protocol support for different Motion Capture solutions with ROMP. 
-
-### Docker usage
-
-Please refer to [docker.md](docs/docker.md)
-
-### Bugs report
-
-Welcome to submit issues for the bugs.
-
-## Contributors
-
-This repository is currently maintained by [Yu Sun](https://github.com/Arthur151).  
-
-We thank [Peng Cheng](https://github.com/CPFLAME) for his constructive comments on Center map training.  
-
-ROMP has also benefited from many developers, including   
- - [Marco Musy](https://github.com/marcomusy) : help in [the textured SMPL visualization](https://github.com/marcomusy/vedo/issues/371).  
- - [Gavin Gray](https://github.com/gngdb) : adding support for an elegant context manager to run code in a notebook.  
- - [VLT Media](https://github.com/vltmedia) and [Vivien Richter](https://github.com/vivi90) : adding support for running on Windows & batch_videos.py.  
- - [Chuanhang Yan](https://github.com/yanch2116) : developing an [addon for driving character in Blender](https://github.com/yanch2116/Blender-addons-for-SMPL).  
- - [Tian Jin](https://github.com/jinfagang): help in simplified smpl and fast rendering ([realrender](https://pypi.org/project/realrender/)).
- - [ZhengdiYu](https://github.com/ZhengdiYu) : helpful discussion on optimizing the implementation details.
- - [Ali Yaghoubian](https://github.com/AliYqb) : add Docker file for simple-romp.
-
-## Citation
-```bibtex
-@InProceedings{BEV,
-author = {Sun, Yu and Liu, Wu and Bao, Qian and Fu, Yili and Mei, Tao and Black, Michael J},
-title = {Putting People in their Place: Monocular Regression of 3D People in Depth},
-booktitle = {CVPR},
-year = {2022}}
-@InProceedings{ROMP,
-author = {Sun, Yu and Bao, Qian and Liu, Wu and Fu, Yili and Michael J., Black and Mei, Tao},
-title = {Monocular, One-stage, Regression of Multiple 3D People},
-booktitle = {ICCV},
-year = {2021}}
-```
-
-## Acknowledgement
-
-We thank all [contributors](docs/contributor.md) for their help!  
-This work was supported by the National Key R&D Program of China under Grand No. 2020AAA0103800.  
-**Disclosure**: MJB has received research funds from Adobe, Intel, Nvidia, Facebook, and Amazon and has financial interests in Amazon, Datagen Technologies, and Meshcapade GmbH. While he was part-time at Amazon during this project, his research was performed solely at Max Planck. 
+ 
+[^1]: Sun, Y., Bao, Q., Liu, W., Fu, Y., Black, M. J., & Mei, T. (2020). Monocular, One-stage, Regression of Multiple 3D People. arXiv preprint arXiv:2008.12272.
+[^2]: Milestone 1 Report: https://drive.google.com/file/d/15AhJr35AdtqHdkhOHylhIPvTnorl-QHf/view?usp=drive_link
+[^3]: Original GitHub Repository https://github.com/Arthur151/ROMP
+[^4]: Sárándi, I., Hermans, A., & Leibe, B. (2022). Learning 3D human pose estimation from dozens of datasets using a geometry-aware autoencoder to bridge between skeleton formats. arXiv preprint arXiv:2212.14474.
