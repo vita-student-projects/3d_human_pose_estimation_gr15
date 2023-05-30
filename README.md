@@ -12,6 +12,43 @@ This principle is explained in great detail in their original publication [^1]. 
 | GPU | NVIDIA GeForce GTX 1060 6GB| 
 | RAM | 32 GB | 
 
+## Set-Up
+
+### Codebase
+```sh
+# Clone Repositoy
+git clone https://github.com/vita-student-projects/3d_human_pose_estimation_gr15
+
+# Python Environment
+# cd 3d_human_pose_estimation_gr15
+conda create -n ROMP python=3.[YOUR PYTHON3 VERSION]
+conda activate ROMP  
+conda install -n ROMP pytorch==1.10.0 torchvision==0.11.1 cudatoolkit=10.2 -c pytorch  
+pip install -r requirements.txt 
+```
+### Meta-Data
+The following guide downloads and unzips the meta-data. For non-Linux users, this can also be done by manually by downloading [model_data.zip](https://drive.google.com/file/d/1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka/view?usp=drive_link) and [trained_models.zip](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link) and unzzipping the archives in the repository folder.
+```sh
+# cd 3d_human_pose_estimation_gr15
+
+# Download Trained Models
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka" -O model_data.zip && rm -rf /tmp/cookies.txt
+unzip model_data.zip
+rm model_data.zip
+https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link
+
+# Download Trained Models
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn" -O trained_models.zip && rm -rf /tmp/cookies.txt
+unzip trained_models.zip
+rm trained_models.zip
+```
+
+
+Notes: 
+- This procedure was tested on Ubuntu 20.04 and 22.04 machines; we experiences unresolvable issues when trying this set-up in Windows
+- For training and evaluation, further dataset-downloads are necessary (see below)
+
+
 ## Contribution
 
 As proposed in [^2], our main contribution is the replacement of their backbone with a smaller architecture in order to reduce the computational load of the AV embedded computer. This means that we modify the deeper layers of the network. Our approach is motivated by the fact that the backbones implemented by [^1] carry ~60 times more parameters than the Head (as shown in the table at the end of this section). More recent pose estimators analyzed in [^2] - especially [^4] - experience good performance by using the EfficientNet architecture. Since this structure promises similar performance using less parameters, we use this architecture to reduce the compute load. 
@@ -51,6 +88,9 @@ All relevant datasets as well as the annotations were made available by the auth
 | PoseTrack    | 66k             | 15        |
 
 ## Experimental Setup
+The training mode of 
+
+One epoch on our system took about 3 hours.
 ## Results
 To verify our findings, we test our implementation against well-established test datasets. For quantitative results, we use following metrics (explained in detail in [^2]):
 - PCK X: Percentage of correctly estimated joint positions (X: distance threshold for "correct"/"incorrect" classification)
