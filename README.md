@@ -36,7 +36,19 @@ Due to the complexity and bugs of their code, we did not implement our second id
 
 All relevant datasets as well as the annotations were made available by the authors of [^1] via a [Google-drive folder](https://drive.google.com/drive/folders/1_g4AbXumhufs7YPdTAK3kFMnTQJYs3w3). They also include instructions on the directory structure such that the files can be processed by their code framework [^3] without any problem. See [this page](docs/dataset.md) for the specific procedure. Depending on the dataset location, one must adapt `dataset_rootdir` in the [config.py](romp/lib/config.py).
 
-
+| Dataset      | Examples Number | Keypoints |
+|--------------|-----------------|-----------|
+| MuCo         | 677k            | 28        |
+| MPII         | 27k             | 16        |
+| MPI-INF-3DHP | 627k            | 28        |
+| LSP          | 2k              | 14        |
+| Human3.6M    | 3.6M            | 32(17)    |
+| CrowdPose    | 20k             | 14        |
+| COCO         | 47k             | 17        |
+| CMU_Panoptic | 1.5M            | 19        |
+| AGORA        | 173k            | 66        |
+| 3DPW         | 60k             | 17        |
+| PoseTrack    | 66k             | 15        |
 
 ## Experimental Setup
 ## Results
