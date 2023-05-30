@@ -108,6 +108,9 @@ Furthermore, we record the evaluation time in s to process the respective test-s
 |  **Our EfficientNet** | training protocol A |   0.890  | 135.744  |  80.520 | 957.85  |
 |  **Our EfficientNet** | training protocol B |   0.955  |  135.043 | 79.237  | 931.44  |
 
+
+An exemplary processing of an input sample is visualized here:
+![3dpw_result_ex](docs/results/PW3D_example_output.png)
 ### CMU Panoptic
 *Batch-Size: 8*
 
