@@ -35,7 +35,6 @@ The following guide downloads and unzips the meta-data. For non-Linux users, thi
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka" -O model_data.zip && rm -rf /tmp/cookies.txt
 unzip model_data.zip
 rm model_data.zip
-https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link
 
 # Download Trained Models
 wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn" -O trained_models.zip && rm -rf /tmp/cookies.txt
