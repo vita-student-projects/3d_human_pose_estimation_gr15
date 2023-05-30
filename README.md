@@ -4,7 +4,13 @@ ROMP is a one-stage 3D pose estimator of humans. The working principle can be su
 - Parameterized Mesh to describe the joint-angles and limb expansion (in SMPL format)
 - Pose of human in current image frame (i.e. how a mesh-rendering has to be scaled, rotated or translated to oberlap the detected human in the scene)
 
-This principle is explained in great detail in their original publication [^1]. In [^2], we give a more compact explanation and we compare ROMP against other state-of-the-art state estimators for our specific AV application. Our project implementation is based on their original GitHub repository [^3]. Their original ReadMe is [here](README_orig.md).
+This principle is explained in great detail in their original publication [^1]. In [^2], we give a more compact explanation and we compare ROMP against other state-of-the-art state estimators for our specific AV application. Our project implementation is based on their original GitHub repository [^3]. Their original ReadMe is [here](README_orig.md). This entire project was conducted on following machine configuration:
+
+|Name |Component|
+|---|---|
+| CPU | AMD Ryzen 7 1800X |
+| GPU | NVIDIA GeForce GTX 1060 6GB| 
+| RAM | 32 GB | 
 
 ## Contribution
 
@@ -32,10 +38,46 @@ All relevant datasets as well as the annotations were made available by the auth
 
 
 
-# Experimental Setup
+## Experimental Setup
+## Results
+To verify our findings, we test our implementation against well-established test datasets. For quantitative results, we use following metrics (explained in detail in [^2]):
+- PCK X: Percentage of correctly estimated joint positions (X: distance threshold for "correct"/"incorrect" classification)
+- MPJPE: Mean Per Joint Position Error
+- PA-MPJPE: MPJPE after the skeleton has been Procrustes-aligned with the ground truth
+Furthermore, we record the evaluation time in s to process the respective test-set. For the ResNet and HRNet, we give *our* results below that we obtained with their evaluation script and not the values found in their paper. 
+
+### 3DPW VIBE
+*Batch-Size: 32*
+| Backbone | Version | PCK 0.6 [%] | MPJPE [mm]  | PA-MPJPE [mm] |  Runtime [s] |
+|---|---|---|---|---|---|
+| Their ResNet-50 | no fine-tune | 0.85  |  142.354 | 71.766  | 809.16  |
+| Their ResNet-50 | with fine-tune  | 0.994  | 80.48  |  49.362 |  866.49 |
+| Their HRNet-32 | no fine-tune  |  0.955 |  87.856 |  53.001 | 1155.1  |
+| Their HRNet-32 | fine-tune  | 0.996  | 77.724  |  46.916 |  1139.78 |
+|  **Our EfficientNet** | training protocol A |   0.890  | 135.744  |  80.520 | 957.85  |
+|  **Our EfficientNet** | training protocol B |   0.955  |  135.043 | 79.237  | 931.44  |
+
+### CMU Panoptic
+*Batch-Size: 32*
+| Backbone | Version | PCK 0.6 [%] | MPJPE [mm]  | PA-MPJPE [mm] |  Runtime [s] |
+|---|---|---|---|---|---|
+| Their ResNet-50 | no fine-tune | 0,85  |  142,354 | 71,766  | 809,16  |
+| Their ResNet-50 | with fine-tune  | 0,994  | 80,48  |  49,362 |  866,49 |
+| Their HRNet-32 | no fine-tune  |  0,955 |  87,856 |  53,001 | 1155,1  |
+| Their HRNet-32 | fine-tune  | 0,996  | 77,724  |  46,916 |  1139,78 |
+|  **Our EfficientNet** | training protocol A | XX  | XX  |  XX | XX  |
+|  **Our EfficientNet** | training protocol B |   0,955  |  135,043 | 79,237  | 931,44  |
+
+### Webcam Demo and Symmetry Issue
+
+We observed during real-time inference from webcam, that the skeleton output is very symmetric when using the EfficientNet backbone with both train protocols. By this, we mean that the left and right arms or legs  have always very similar joint angles even when those limbs are very asymmetric on the real human. We assume that these angles are a mean of the two different joint angles on the real human. However, we find the pose estimation in case of symmetric human motion very good considering our incomplete training process. Even more complicated postures like crouching are detected properly. Below, we show a real life performance of our EfficientNet in comparison to their ResNet-backbone.
+
+![effnet_real_vid](docs/results/effnet.gif)
 
 
- 
+![resnet_real_vid](docs/results/resnet.gif)
+
+# Resources
 [^1]: Sun, Y., Bao, Q., Liu, W., Fu, Y., Black, M. J., & Mei, T. (2020). Monocular, One-stage, Regression of Multiple 3D People. arXiv preprint arXiv:2008.12272.
 [^2]: Milestone 1 Report: https://drive.google.com/file/d/15AhJr35AdtqHdkhOHylhIPvTnorl-QHf/view?usp=drive_link
 [^3]: Original GitHub Repository https://github.com/Arthur151/ROMP
