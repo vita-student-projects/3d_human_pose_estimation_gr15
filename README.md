@@ -27,7 +27,7 @@ conda install -n ROMP pytorch==1.10.0 torchvision==0.11.1 cudatoolkit=10.2 -c py
 pip install -r requirements.txt 
 ```
 ### Meta-Data
-The following guide downloads and unzips the meta-data. For non-Linux users, this can also be done by manually by downloading [model_data.zip](https://drive.google.com/file/d/1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka/view?usp=drive_link) and [trained_models.zip](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link) and unzzipping the archives in the repository folder.
+The following guide downloads and unzips the meta-data. For non-Linux users, this can also be done by manually by downloading [model_data.zip](https://drive.google.com/file/d/1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka/view?usp=drive_link) and [trained_models.zip](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link) and unzipping the archives in the repository folder.
 ```sh
 # cd 3d_human_pose_estimation_gr15
 
@@ -43,7 +43,7 @@ rm trained_models.zip
 ```
 
 
-Notes: 
+Remarks
 - This procedure was tested on Ubuntu 20.04 and 22.04 machines; we experiences unresolvable issues when trying this set-up in Windows
 - For training and evaluation, further dataset-downloads are necessary (see below)
 
@@ -109,15 +109,17 @@ Furthermore, we record the evaluation time in s to process the respective test-s
 |  **Our EfficientNet** | training protocol B |   0.955  |  135.043 | 79.237  | 931.44  |
 
 ### CMU Panoptic
-*Batch-Size: 32*
-| Backbone | Version | PCK 0.6 [%] | MPJPE [mm]  | PA-MPJPE [mm] |  Runtime [s] |
-|---|---|---|---|---|---|
-| Their ResNet-50 | no fine-tune | 0,85  |  142,354 | 71,766  | 809,16  |
-| Their ResNet-50 | with fine-tune  | 0,994  | 80,48  |  49,362 |  866,49 |
-| Their HRNet-32 | no fine-tune  |  0,955 |  87,856 |  53,001 | 1155,1  |
-| Their HRNet-32 | fine-tune  | 0,996  | 77,724  |  46,916 |  1139,78 |
-|  **Our EfficientNet** | training protocol A | XX  | XX  |  XX | XX  |
-|  **Our EfficientNet** | training protocol B |   0,955  |  135,043 | 79,237  | 931,44  |
+*Batch-Size: 8*
+
+The dataset is split up into group-activities. The activities evaluated here are called "haggling", "mafia", "ultimatum" and "pizza". Find out more on [their project page](http://domedb.perception.cs.cmu.edu/dataset.html).
+| Backbone | Version | Haggling-MPJPE [mm] | Mafia-MPJPE [mm]  | Ultimatum-MPJPE [mm] | Pizza-MPJPE [mm] |  Mean MPJPE [mm] |Runtime [s] |
+|---|---|---|---|---|---|---|---|
+| Their ResNet-50 | no fine-tune | 129.33 |  152.18 | 152.94  | 169.15  |150.90 | 303.43 |
+| Their ResNet-50 | with fine-tune  | 108.41  | 123.14 |  140.21 |  145.65 | 129.35 | 327.9 |
+| Their HRNet-32 | no fine-tune  |  116.19 |  129.87 |  149.64 | 148.98  | 136.17 | 476.2 |
+| Their HRNet-32 | fine-tune  | 116.02  | 131.39  |  144.91 |  146.86 | 134.79 | 475.02 |
+|  **Our EfficientNet** | training protocol A | 141.18  | 167.73  |  163.12 | 175.56  | 161.90 | 357.21 |
+|  **Our EfficientNet** | training protocol B |   159.47 | 170.07 | 172.15 | 186.19 | 171.97 | 365.65 | 
 
 ### Webcam Demo and Symmetry Issue
 
