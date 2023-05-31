@@ -230,7 +230,7 @@ The dataset is split up into group-activities. The activities evaluated here are
 | Their ResNet-50 | no fine-tune | 129.33 |  152.18 | 152.94  | 169.15  |150.90 | 303.43 |
 | Their ResNet-50 | with fine-tune  | 108.41  | 123.14 |  140.21 |  145.65 | 129.35 | 327.9 |
 | Their HRNet-32 | no fine-tune  |  116.19 |  129.87 |  149.64 | 148.98  | 136.17 | 476.2 |
-| Their HRNet-32 | fine-tune  | 116.02  | 131.39  |  144.91 |  146.86 | 134.79 | 475.02 |
+| Their HRNet-32 | with fine-tune  | 116.02  | 131.39  |  144.91 |  146.86 | 134.79 | 475.02 |
 |  **Our EfficientNet** | training protocol A | 141.18  | 167.73  |  163.12 | 175.56  | 161.90 | 357.21 |
 |  **Our EfficientNet** | training protocol B |   159.47 | 170.07 | 172.15 | 186.19 | 171.97 | 365.65 | 
 
