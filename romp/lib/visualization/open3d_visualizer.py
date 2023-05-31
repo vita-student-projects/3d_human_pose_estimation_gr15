@@ -11,6 +11,29 @@ from visualization.create_meshes import create_body_mesh, create_body_model
 def convert_trans_scale(trans):
     trans *= np.array([0.4, 0.6, 0.7])
     return trans
+    
+def extract_keypoints(coords):
+    joint_indices = [0, 2, 5, 11, 1, 4, 10, 3, 6, 24, 53, 16, 18, 20, 17, 19, 21]
+    extracted_coords = coords[joint_indices]
+    return extracted_coords
+
+def get_num_frames_from_json():
+    try:
+        with open('keypoints.json', 'r') as f:
+            data = json.load(f)
+        return len(data)
+    except FileNotFoundError:
+        return 0
+
+def write_keypoints_to_json(keypoints):
+    try:
+        with open('keypoints.json', 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = []
+    data.append({"frame": get_num_frames_from_json()+1, "keypoints": keypoints.flatten().tolist()})
+    with open('keypoints.json', 'w') as f:
+        json.dump(data, f)
 
 class Open3d_visualizer(object):
     def __init__(self, multi_mode=False):
@@ -76,6 +99,12 @@ class Open3d_visualizer(object):
         mesh_ob.compute_triangle_normals()
         mesh_ob.compute_vertex_normals()
         self.viewer.update_geometry(mesh_ob)
+        
+        # Extract keypoints
+        extracted_coords = extract_keypoints(verts)
+
+        # Write keypoints to JSON file
+        write_keypoints_to_json(extracted_coords)
 
     def run(self, verts, trans=None):
         self.process_single_mesh(verts, trans, self.smoother, self.mesh)
