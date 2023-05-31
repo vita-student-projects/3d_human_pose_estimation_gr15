@@ -180,11 +180,11 @@ Based on this, we tested following 2 train protocols:
 
 |  | Protocol A | Protocol B |
 |---|---|---|
-| Pretrain 1 Dataset Configuration | $p_{coco}=1.0$ | $p_{mpii}=0.5,\\p_{coco}=0.5$ |
+| Pretrain 1 Dataset Configuration | $p_{coco}=1.0$ | $p_{mpii}=0.5,\\ p_{coco}=0.5$ |
 | Pretrain 1 Number of Epochs | 2 | 2 |
-| Pretrain 2 Dataset Configuration |  $p_{h36m}=0.5,\\p_{coco}=0.5$ | $p_{mpii}=0.25,\\p_{coco}=0.25,\\p_{h36m}=0.5$ |
+| Pretrain 2 Dataset Configuration |  $p_{h36m}=0.5,\\ p_{coco}=0.5$ | $p_{mpii}=0.25,\\ p_{coco}=0.25,\\ p_{h36m}=0.5$ |
 | Pretrain 2 Number of Epochs | 1 | 2 |
-| Train Dataset Configuration | $p_{muco}=0.3,\\p_{coco}=0.1,\\p_{h36m}=0.3,\\p_{mpii}=0.3$ | $p_{h36m}=0.2,\\p_{mpiinf}=0.16,\\p_{coco}=0.2,\\p_{lsp}=0.06,\\p_{mpii}=0.1,\\p_{muco}=0.14,\\p_{crowdpose}=0.14$|
+| Train Dataset Configuration | $p_{muco}=0.3,\\ p_{coco}=0.1,\\ p_{h36m}=0.3,\\ p_{mpii}=0.3$ | $p_{h36m}=0.2,\\ p_{mpiinf}=0.16,\\ p_{coco}=0.2,\\ p_{lsp}=0.06,\\ p_{mpii}=0.1,\\ p_{muco}=0.14,\\ p_{crowdpose}=0.14$|
 | Train Number of Epochs | 3 | 17 |
 | Trained Weights Location | [ROMP_EfficientNetV2S_TPA.pkl](trained_models/ROMP_EfficientNetV2S_TPA.pkl)| [ROMP_EfficientNetV2S_TPB.pkl](trained_models/ROMP_EfficientNetV2S_TPB.pkl) |
 
