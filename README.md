@@ -12,48 +12,7 @@ This principle is explained in great detail in their original publication [^1]. 
 | GPU | NVIDIA GeForce GTX 1060 6GB| 
 | RAM | 32 GB | 
 
-## Set-Up
-
-### Codebase
-```sh
-# Clone Repositoy
-git clone https://github.com/vita-student-projects/3d_human_pose_estimation_gr15
-
-# Python Environment
-# cd 3d_human_pose_estimation_gr15
-conda create -n ROMP python=3.[YOUR PYTHON3 VERSION]
-conda activate ROMP  
-conda install -n ROMP pytorch==1.10.0 torchvision==0.11.1 cudatoolkit=10.2 -c pytorch  
-pip install -r requirements.txt 
-```
-### Meta-Data
-The following guide downloads and unzips the meta-data. For non-Linux users, this can also be done by manually by downloading [model_data.zip](https://drive.google.com/file/d/1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka/view?usp=drive_link) and [trained_models.zip](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link) and unzipping the archives in the repository folder.
-```sh
-# cd 3d_human_pose_estimation_gr15
-
-# Download Trained Models
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka" -O model_data.zip && rm -rf /tmp/cookies.txt
-unzip model_data.zip
-rm model_data.zip
-
-# Download Trained Models
-wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn" -O trained_models.zip && rm -rf /tmp/cookies.txt
-unzip trained_models.zip
-rm trained_models.zip
-```
-
-
-Remarks
-- This procedure was tested on Ubuntu 20.04 and 22.04 machines; we experiences unresolvable issues when trying this set-up in Windows
-- For training and evaluation, further dataset-downloads are necessary (see below)
-
-## Usage Guide
-
-- Webcam Inference
-- Train
-- Inference
-
-
+To download and run the code of this repository, please see the sections "Set-Up" and "Usage Guide" at the bottom of this ReadMe.
 ## Contribution
 
 As proposed in [^2], our main contribution is the replacement of their backbone with a smaller architecture in order to reduce the computational load of the AV embedded computer. This means that we modify the deeper layers of the network. Our approach is motivated by the fact that the backbones implemented by [^1] carry ~60 times more parameters than the Head (as shown in the table at the end of this section). More recent pose estimators analyzed in [^2] - especially [^4] - experience good performance by using the EfficientNet architecture. Since this structure promises similar performance using less parameters, we use this architecture to reduce the compute load. 
@@ -73,6 +32,7 @@ This implementation cuts the number of parameters in the backbone by 18% and 28%
 | Head  |  568,018 |
 
 Due to the complexity and bugs of their code, we did not implement our second idea of testing an additional loss term.
+
 
 ## Dataset
 
@@ -183,16 +143,16 @@ Based on this, we tested following 2 train protocols:
 
 |  | Protocol A | Protocol B |
 |---|---|---|
-| Pretrain 1 Dataset Configuration | XX | XX |
-| Pretrain 1 Number of Epochs | XX | XX |
-| Pretrain 2 Dataset Configuration | XX | XX |
-| Pretrain 2 Number of Epochs | XX | XX |
-| Train Dataset Configuration | $p_{muco}=0.3,\\p_{coco}=0.1,\\p_{h36m}=0.3,\\p_{mpii}=0.3$ | $p_{h36m}=0.2,\\p_{mpiinf}=0.16,\\p_{coco}=0.2,\\p_{lsp}=0.06,\\p_{muco}=0.1,\\p_{crowdpose}=0.14,\\p_{crowdpose}=0.14$|
+| Pretrain 1 Dataset Configuration | $p_{coco}=1.0$ | $p_{mpii}=0.5,\\p_{coco}=0.5$ |
+| Pretrain 1 Number of Epochs | 2 | 2 |
+| Pretrain 2 Dataset Configuration |  $p_{h36m}=0.5,\\p_{coco}=0.5$ | $p_{mpii}=0.25,\\p_{coco}=0.25,\\p_{h36m}=0.5$ |
+| Pretrain 2 Number of Epochs | 1 | 2 |
+| Train Dataset Configuration | $p_{muco}=0.3,\\p_{coco}=0.1,\\p_{h36m}=0.3,\\p_{mpii}=0.3$ | $p_{h36m}=0.2,\\p_{mpiinf}=0.16,\\p_{coco}=0.2,\\p_{lsp}=0.06,\\p_{mpii}=0.1,\\p_{muco}=0.14,\\p_{crowdpose}=0.14$|
 | Train Number of Epochs | 3 | 17 |
 | Trained Weights Location | [ROMP_EfficientNetV2S_TPA.pkl](trained_models/ROMP_EfficientNetV2S_TPA.pkl)| [ROMP_EfficientNetV2S_TPB.pkl](trained_models/ROMP_EfficientNetV2S_TPB.pkl) |
 
 Remarks
-- One epoch with 10,0000 samples took on our system took about 3 hours
+- One epoch with 10,0000 samples on our system took about 3 hours
 - Trained weights were downloaded in the "Set-Up" section; they are also available [here](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link)
 
 ## Results
@@ -229,6 +189,13 @@ The dataset is split up into group-activities. The activities evaluated here are
 |  **Our EfficientNet** | training protocol A | 141.18  | 167.73  |  163.12 | 175.56  | 161.90 | 357.21 |
 |  **Our EfficientNet** | training protocol B |   159.47 | 170.07 | 172.15 | 186.19 | 171.97 | 365.65 | 
 
+<!-- ### Inference Performance
+
+It is interesting to note that the evaluation time for all*
+
+![inference_result](docs/results/plot_performance_gain_time_small.png) -->
+
+
 ### Webcam Demo and Symmetry Issue
 
 We observed during real-time inference from webcam, that the skeleton output is very symmetric when using the EfficientNet backbone with both train protocols. By this, we mean that the left and right arms or legs  have always very similar joint angles even when those limbs are very asymmetric on the real human. We assume that these angles are a mean of the two different joint angles on the real human. However, we find the pose estimation in case of symmetric human motion very good considering our incomplete training process. Even more complicated postures like crouching are detected properly. Below, we show a real life performance of our EfficientNet in comparison to their ResNet-backbone.
@@ -243,7 +210,76 @@ We observed during real-time inference from webcam, that the skeleton output is 
 In this project, we successfully added the EfficientNet to the ROMP's backbone collection. We could demonstrate that with considerably less training, we could obtain loss values in the region of their networks. This fact as well as qualitative tests with the webcam proves the concept of our implementation. We note however, that the original objective of the backbone replacement - lower computational load and faster inference speed - could only be partly achieved. Despite having ~30% less parameters, our EfficientNet took longer than the ResNet to run the evaluations. The performance of the HRNet was surpassed however.
 
 To summarize, we could demonstrate the integration of the EfficientNet and that it can be placed between the original 2 backbones in terms of inference quality.
+# Set-Up
 
+## Codebase
+```sh
+# Clone Repositoy
+git clone https://github.com/vita-student-projects/3d_human_pose_estimation_gr15
+
+# Python Environment
+# cd 3d_human_pose_estimation_gr15
+conda create -n ROMP python=3.[YOUR PYTHON3 VERSION]
+conda activate ROMP  
+conda install -n ROMP pytorch==1.10.0 torchvision==0.11.1 cudatoolkit=10.2 -c pytorch  
+pip install -r requirements.txt 
+```
+## Meta-Data
+The following guide downloads and unzips the meta-data. For non-Linux users, this can also be done by manually by downloading [model_data.zip](https://drive.google.com/file/d/1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka/view?usp=drive_link) and [trained_models.zip](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link) and unzipping the archives in the repository folder.
+```sh
+# cd 3d_human_pose_estimation_gr15
+
+# Download Trained Models
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka" -O model_data.zip && rm -rf /tmp/cookies.txt
+unzip model_data.zip
+rm model_data.zip
+
+# Download Trained Models
+wget --load-cookies /tmp/cookies.txt "https://docs.google.com/uc?export=download&confirm=$(wget --quiet --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate 'https://docs.google.com/uc?export=download&id=FILEID' -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p')&id=1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn" -O trained_models.zip && rm -rf /tmp/cookies.txt
+unzip trained_models.zip
+rm trained_models.zip
+```
+
+
+Remarks
+- This procedure was tested on Ubuntu 20.04 and 22.04 machines; we experiences unresolvable issues when trying this set-up in Windows
+- For training and evaluation, further dataset-downloads are necessary (see below)
+
+# Usage Guide
+## Webcam Demo
+In order to execute a minimal webcam-inference demo, run
+```bash
+python3 -m romp.predict.webcam --show_largest_person_only
+```
+This will use our EfficientNet backbone trained on protocol B. To change the configuration, edit [webcam.yaml](configs/webcam.yml). The most important parameters are `backbone` and `model_path`. As the command suggests, only one person can be detected right now due to errors in their visualization pipeline.
+
+## Train
+*Make sure that the `dataset_rootdir` is correct in [config.py](romp/lib/config.py) and that all required datasets are available!*
+
+The default training process continues train protocol B on the ROMP network with EfficientNet backbone:
+```sh
+./scripts/V1_train_effnet.sh
+```
+To configure the training process, one must edit [v1_effnet.yml](configs/v1_effnet.yml). Important parameters are:
+- `dataset`: Comma separated list of dataset identifiers
+- `sample_prob`: Dictionary with $p_i$ of each dataset (note that $\sum_{\forall i} p_i\equiv 1$)
+
+If it is intended to train a non-EfficientNet backbone, one must also consider:
+- `model_path`: Pretrained model from which the training starts
+- `backbone`: Which backbone to use
+## Evaluation
+*Make sure that the `dataset_rootdir` is correct in [config.py](romp/lib/config.py) and that all required datasets are available!*
+
+In order to evaluate ROMP with EfficientNet trained on protocol B againt the test sets, run:
+```sh
+# CMU Panoptic
+python -m romp.test --configs_yml=configs/eval_cmu_panoptic_effnet.yml
+# 3DPW VIBE
+python -m romp.test --configs_yml=configs/eval_3dpw_test_effnet.yml
+```
+Edit the referenced `yaml` file to use the EfficientNet trained with protocol A.
+
+In order to benchmark the original backbones on the 3DPW VIBE dataset, exchange the `yaml` file above with the appropriate one from the [config](config) directory (named `eval_3dpw_test*`). CMU evaluation on their datasets is not discussed here.
 # Resources
 [^1]: Sun, Y., Bao, Q., Liu, W., Fu, Y., Black, M. J., & Mei, T. (2020). Monocular, One-stage, Regression of Multiple 3D People. arXiv preprint arXiv:2008.12272.
 [^2]: Milestone 1 Report: https://drive.google.com/file/d/15AhJr35AdtqHdkhOHylhIPvTnorl-QHf/view?usp=drive_link
