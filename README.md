@@ -1,4 +1,4 @@
-# ROMP - Monocular, One-stage, Regression of Multiple 3D People
+# ROMP - Monocular, One-stage Regression of Multiple 3D People
 
 ROMP is a one-stage 3D pose estimator of humans. The working principle can be summarized as follows: For each detected human in a scene, the network predicts:
 - Parameterized Mesh to describe the joint-angles and limb expansion (in SMPL format)
@@ -46,6 +46,12 @@ rm trained_models.zip
 Remarks
 - This procedure was tested on Ubuntu 20.04 and 22.04 machines; we experiences unresolvable issues when trying this set-up in Windows
 - For training and evaluation, further dataset-downloads are necessary (see below)
+
+## Usage Guide
+
+- Webcam Inference
+- Train
+- Inference
 
 
 ## Contribution
@@ -170,9 +176,25 @@ This dataset is designed to capture the complexity and diversity of human activi
 }
 ```
 ## Experimental Setup
-The training mode of 
+We use the algorithms implemented in [^3] to train, evaluate, and demo our code. For the training, one has to specify the datasets $i$ to be used as well as their sampling probability $p_i$ with $\sum_{\forall i}p_i \equiv 1$. Each "epoch" consists of sampling 10,000 images from the datasets based on the $p_i$ distribution. If there are less than 10,000 samples in the selected datasets, one epoch corresponds to taking the entire datasets (= conventional definition of "epoch").
 
-One epoch on our system took about 3 hours.
+
+Based on this, we tested following 2 train protocols:
+
+|  | Protocol A | Protocol B |
+|---|---|---|
+| Pretrain 1 Dataset Configuration | XX | XX |
+| Pretrain 1 Number of Epochs | XX | XX |
+| Pretrain 2 Dataset Configuration | XX | XX |
+| Pretrain 2 Number of Epochs | XX | XX |
+| Train Dataset Configuration | $p_{muco}=0.3,\\p_{coco}=0.1,\\p_{h36m}=0.3,\\p_{mpii}=0.3$ | $p_{h36m}=0.2,\\p_{mpiinf}=0.16,\\p_{coco}=0.2,\\p_{lsp}=0.06,\\p_{muco}=0.1,\\p_{crowdpose}=0.14,\\p_{crowdpose}=0.14$|
+| Train Number of Epochs | 3 | 17 |
+| Trained Weights Location | [ROMP_EfficientNetV2S_TPA.pkl](trained_models/ROMP_EfficientNetV2S_TPA.pkl)| [ROMP_EfficientNetV2S_TPB.pkl](trained_models/ROMP_EfficientNetV2S_TPB.pkl) |
+
+Remarks
+- One epoch with 10,0000 samples took on our system took about 3 hours
+- Trained weights were downloaded in the "Set-Up" section; they are also available [here](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link)
+
 ## Results
 To verify our findings, we test our implementation against well-established test datasets. For quantitative results, we use following metrics (explained in detail in [^2]):
 - PCK X: Percentage of correctly estimated joint positions (X: distance threshold for "correct"/"incorrect" classification)
@@ -192,7 +214,7 @@ Furthermore, we record the evaluation time in s to process the respective test-s
 |  **Our EfficientNet** | training protocol B |   0.955  |  135.043 | 79.237  | 931.44  |
 
 
-An exemplary processing of an input sample is visualized here:
+An exemplary processing of an input sample is visualized here using **our** EfficientNet backbone:
 ![3dpw_result_ex](docs/results/PW3D_example_output.png)
 ### CMU Panoptic
 *Batch-Size: 8*
@@ -215,6 +237,12 @@ We observed during real-time inference from webcam, that the skeleton output is 
 
 
 ![resnet_real_vid](docs/results/resnet.gif)
+
+# Conclusion
+
+In this project, we successfully added the EfficientNet to the ROMP's backbone collection. We could demonstrate that with considerably less training, we could obtain loss values in the region of their networks. This fact as well as qualitative tests with the webcam proves the concept of our implementation. We note however, that the original objective of the backbone replacement - lower computational load and faster inference speed - could only be partly achieved. Despite having ~30% less parameters, our EfficientNet took longer than the ResNet to run the evaluations. The performance of the HRNet was surpassed however.
+
+To summarize, we could demonstrate the integration of the EfficientNet and that it can be placed between the original 2 backbones in terms of inference quality.
 
 # Resources
 [^1]: Sun, Y., Bao, Q., Liu, W., Fu, Y., Black, M. J., & Mei, T. (2020). Monocular, One-stage, Regression of Multiple 3D People. arXiv preprint arXiv:2008.12272.
