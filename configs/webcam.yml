@@ -6,8 +6,7 @@ ARGS:
  backbone: 'effnet'
  model_precision: 'fp16'
  val_batch_size: 1
-#  model_path:   'trained_models/ROMP_ResNet50_V1.pkl'
- model_path: /home/svenbecker/Documents/EPFL/dlav/project/checkpoints/effnet_cm64_V1_effnet_on_gpu0_val_TRAIN_EP5_dot_7/effnet_cm64_V1_effnet_val_cache.pkl
+ model_path:  trained_models/ROMP_EfficientNetV2S_TPB.pkl
  save_mesh: False
  save_centermap: False
  save_dict_results: False

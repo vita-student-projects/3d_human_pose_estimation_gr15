@@ -1,4 +1,4 @@
-import sys 
+import sys, json
 whether_set_yml = ['configs_yml' in input_arg for input_arg in sys.argv]
 if sum(whether_set_yml)==0:
     default_webcam_configs_yml = "--configs_yml=configs/webcam.yml"
@@ -71,7 +71,7 @@ class Webcam_processor(Predictor):
             with torch.no_grad():
                 outputs = self.single_image_forward(frame)
             counter.count()
-            #counter.fps()
+            # counter.fps()
             # outputs['detection_flag'] = True
 
 

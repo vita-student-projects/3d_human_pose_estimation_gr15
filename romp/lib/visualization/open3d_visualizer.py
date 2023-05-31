@@ -7,7 +7,7 @@ from config import args
 from utils.temporal_optimization import OneEuroFilter
 from visualization.create_meshes import create_body_mesh, create_body_model
 
-
+import json
 def convert_trans_scale(trans):
     trans *= np.array([0.4, 0.6, 0.7])
     return trans
@@ -104,7 +104,7 @@ class Open3d_visualizer(object):
         extracted_coords = extract_keypoints(verts)
 
         # Write keypoints to JSON file
-        write_keypoints_to_json(extracted_coords)
+        # write_keypoints_to_json(extracted_coords)
 
     def run(self, verts, trans=None):
         self.process_single_mesh(verts, trans, self.smoother, self.mesh)
