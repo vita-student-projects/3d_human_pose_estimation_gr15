@@ -5,6 +5,7 @@ from .eval import val_result,print_results
 from visualization.visualization import draw_skeleton_multiperson
 import pandas
 import pickle
+import time
 
 class Demo(Base):
     def __init__(self):
@@ -183,6 +184,9 @@ def _calc_pn_fps(runtime_dict, person_num_crowd_index_dict):
     return person_num_runtime_dict, pn_fps
 
 def main():
+    t_start = time.time()
+    print("#" * 10, "Start Time: ", t_start)
+
     with ConfigContext(parse_args(sys.argv[1:])):
         demo = Demo()
         if args().eval_dataset == 'crowdpose_val':
@@ -199,6 +203,9 @@ def main():
             demo.test_runtime_crowdpose()
         else:
             demo.test_eval()
+    t_end = time.time()
+    print("#" * 10,"End Time: ", t_end)
+    print("#" * 10,"Delta Time: ", t_end - t_start)
 
 if __name__ == '__main__':
     main()

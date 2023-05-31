@@ -4,7 +4,7 @@ ARGS:
  GPUS: 0
  model_version: 1
  
- val_batch_size: 64
+ val_batch_size: 32
  nw_eval: 2
  eval: True
  collision_aware_centermap: False

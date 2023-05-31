@@ -97,36 +97,40 @@ def val_result(self, loader_val, evaluation = False, vis_results=False):
     for iter_num, meta_data in enumerate(loader_val):
         if meta_data is None:
             continue
-
         meta_data_org = meta_data.copy()
+
         try:
             outputs = self.network_forward(eval_model, meta_data, self.eval_cfg)
         except:
             continue
-
+        
         if outputs['detection_flag'].sum()==0:
             print('Detection failure!!! {}'.format(outputs['meta_data']['imgpath']))
             continue
 
         ED, kp3d_vis = calc_outputs_evaluation_matrix(
             self, outputs, ED)
-        print(iter_num)
-        if iter_num == 10: break
-        if iter_num % 2 == 0:
-            print('BLU {}/{}'.format(iter_num, len(loader_val)))
+        if iter_num % (self.val_batch_size*2) == 0:
+            print('{}/{}'.format(iter_num, len(loader_val)))
             #eval_results = print_results(ED.copy())
             if not evaluation:
                 outputs = self.network_forward(eval_model, meta_data_org, self.val_cfg)
+            if iter_num % (self.val_batch_size*4) == 0 and False:
+                print("Visualize ...")
+                
+                vis_ids = np.arange(max(min(self.val_batch_size, len(outputs['reorganize_idx'])), 8)//4), None
+                save_name = '{}_{}'.format(self.global_count,iter_num)
+                for ds_name in set(outputs['meta_data']['data_set']):
+                    save_name += '_{}'.format(ds_name)
+                show_items = ['org_img', 'mesh', 'centermap']
+                
+                if kp3d_vis is not None:
+                    show_items.append('j3d')
+                self.visualizer.visulize_result(outputs, outputs['meta_data'], show_items=show_items,\
+                    vis_cfg={'settings': ['save_img'], 'vids': vis_ids, 'save_dir':self.result_img_dir, 'save_name':save_name}, kp3ds=kp3d_vis) #'org_img', 
+                print("Visualization done !")
             
-            vis_ids = np.arange(max(min(self.val_batch_size, len(outputs['reorganize_idx'])), 8)//4), None
-            save_name = '{}_{}'.format(self.global_count,iter_num)
-            for ds_name in set(outputs['meta_data']['data_set']):
-                save_name += '_{}'.format(ds_name)
-            show_items = ['mesh', 'joint_sampler', 'pj2d', 'classify']
-            if kp3d_vis is not None:
-                show_items.append('j3d')
-            self.visualizer.visulize_result(outputs, outputs['meta_data'], show_items=show_items,\
-                vis_cfg={'settings': ['save_img'], 'vids': vis_ids, 'save_dir':self.result_img_dir, 'save_name':save_name}, kp3ds=kp3d_vis) #'org_img', 
+            
     print('{} on local_rank {}'.format(['Evaluation' if evaluation else 'Validation'], self.local_rank))
     eval_results = print_results(ED)
 

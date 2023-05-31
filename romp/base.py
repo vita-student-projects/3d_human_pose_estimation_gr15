@@ -43,10 +43,12 @@ class Base(object):
             if self.model_version==6:
                 model = load_model(self.model_path, model, prefix = 'module.', drop_prefix=drop_prefix, fix_loaded=True)
             else:
-                model = load_model(self.model_path, model, prefix = '', drop_prefix=drop_prefix, fix_loaded=False) 
-                # model = load_model(self.model_path, model, prefix = 'module.', drop_prefix=drop_prefix, fix_loaded=False) 
+                # model = load_model(self.model_path, model, prefix = '', drop_prefix=drop_prefix, fix_loaded=False) 
+                if args().backbone == "effnet": model = load_model(self.model_path, model, prefix = '', drop_prefix=drop_prefix, fix_loaded=False) 
+                else: model = load_model(self.model_path, model, prefix = 'module.', drop_prefix=drop_prefix, fix_loaded=False) 
                 train_entire_model(model)
-        model = load_model(self.model_path, model, prefix = '', drop_prefix="", fix_loaded=False) 
+        if args().backbone == "effnet": model = load_model(self.model_path, model, prefix = '', drop_prefix='', fix_loaded=False) 
+               
         
         if self.distributed_training:
             print('local_rank', self.local_rank)
@@ -144,7 +146,7 @@ class Base(object):
         logging.info('gathering single image datasets.')
         datasets = SingleDataset(**kwargs)
         return DataLoader(dataset = datasets, shuffle=shuffle,batch_size = self.val_batch_size,\
-                drop_last= drop_last, pin_memory = True)
+                drop_last= drop_last, pin_memory = True, num_workers=16)
 
     def set_up_val_loader(self):
         eval_datasets = self.eval_datasets.split(',')
