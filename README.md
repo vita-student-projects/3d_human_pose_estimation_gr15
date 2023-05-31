@@ -151,9 +151,15 @@ Based on this, we tested following 2 train protocols:
 | Train Number of Epochs | 3 | 17 |
 | Trained Weights Location | [ROMP_EfficientNetV2S_TPA.pkl](trained_models/ROMP_EfficientNetV2S_TPA.pkl)| [ROMP_EfficientNetV2S_TPB.pkl](trained_models/ROMP_EfficientNetV2S_TPB.pkl) |
 
+Train protocol A was implemented as a first proof-of-concept algorithm by us. The goal was to ensure that our backbone implemenentation yields somewhat usable results.
+
+Train protocol B follows the pre-configured protocol in the original code [^3].
+
 Remarks
 - One epoch with 10,0000 samples on our system took about 3 hours
-- Trained weights were downloaded in the "Set-Up" section; they are also available [here](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link)
+- The pretraining process was deliberately not shared by the authors of [^3] (see for example this [GitHub issue](https://github.com/Arthur151/ROMP/issues/107) of [^3]'s maintainer)
+- The authors trained their models for about 2 weeks on four high-end GPUs (see this [GitHub comment](https://github.com/Arthur151/ROMP/issues/121#issuecomment-1026458361) of [^3]'s maintainer)
+- Trained weights were downloaded in the "Set-Up" section below; they are also available [here](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link)
 
 ## Results
 To verify our findings, we test our implementation against well-established test datasets. For quantitative results, we use following metrics (explained in detail in [^2]):
@@ -189,11 +195,17 @@ The dataset is split up into group-activities. The activities evaluated here are
 |  **Our EfficientNet** | training protocol A | 141.18  | 167.73  |  163.12 | 175.56  | 161.90 | 357.21 |
 |  **Our EfficientNet** | training protocol B |   159.47 | 170.07 | 172.15 | 186.19 | 171.97 | 365.65 | 
 
-<!-- ### Inference Performance
+### Inference Performance
 
-It is interesting to note that the evaluation time for all*
+In both testsets, one can clearly establish the computational performance ranking
 
-![inference_result](docs/results/plot_performance_gain_time_small.png) -->
+1. ResNet-50
+2. EfficientNetV2-S
+3. HRNet-32
+
+based on the duration of the evaluation (see also figure below).
+
+![inference_result](docs/results/plot_performance_gain_time_small.png)
 
 
 ### Webcam Demo and Symmetry Issue
