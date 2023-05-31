@@ -74,7 +74,7 @@ All relevant datasets as well as the annotations were made available by the auth
 
 | Dataset      | Examples Number | Keypoints |
 |--------------|-----------------|-----------|
-| MuCo         | 677k            | 28        |
+| MuCo         | 677k            | 21        |
 | MPII         | 27k             | 16        |
 | MPI-INF-3DHP | 627k            | 28        |
 | LSP          | 2k              | 14        |
@@ -84,8 +84,91 @@ All relevant datasets as well as the annotations were made available by the auth
 | CMU_Panoptic | 1.5M            | 19        |
 | AGORA        | 173k            | 66        |
 | 3DPW         | 60k             | 17        |
-| PoseTrack    | 66k             | 15        |
+| PoseTrack    | 66k             | 17        |
 
+###Human3.6M (H36M) Dataset:
+This dataset provides a comprehensive and realistic dataset for analyzing human movements and poses in controlled conditions. It was collected using a motion capture system with 4 high-resolution cameras and 4D dynamic body markers. It consists of 11 professional actors (5 females and 6 males) performing 17 different activities in a well-controlled indoor environment with consistent lighting conditions and a static background. The dataset uses 32 joint keypoints, with 17 main keypoints defined as follows:
+```sh
+H36M_JOINTS = {
+    'Hip': 0,
+    'RHip': 1,
+    'RKnee': 2,
+    'RFoot': 3,
+    'RFootTip': 4,
+    'LHip': 6,
+    'LKnee': 7,
+    'LFoot': 8,
+    'Spine': 12,
+    'Thorax': 13,
+    'Neck/Nose': 14,
+    'Head': 15,
+    'LShoulder': 17,
+    'LElbow': 18,
+    'LWrist': 19,
+    'RShoulder': 25,
+    'RElbow': 26,
+    'RWrist': 27
+}
+```
+If downloaded from the official website of Human3.6M, a preprocessing step is required to extract frames from the original videos and save them as individual image files. You can use the following command for preprocessing:
+```sh
+python ROMP/romp/lib/dataset/preprocess/h36m_extract_frames.py h36m_extract_frames.py path/to/h36m_video_folder path/to/image_save_folder
+```
+###CMU Panoptic Studio Dataset:
+This dataset provides a comprehensive and diverse set of annotations for human pose and tracking in complex real-world scenarios. It consists of video sequences captured from multiple camera views in various environments, including indoor and outdoor settings. For each frame in the dataset, it provides pixel-level 2D joint annotations for multiple individuals.
+```sh
+CMU_JOINTS = {
+    'Neck': 0,
+    'Nose': 1,
+    'Pelvis': 2,
+    'LShoulder': 3,
+    'LElbow': 4,
+    'LWrist': 5,
+    'LHip': 6,
+    'LKnee': 7,
+    'LAnkle': 8,
+    'RShoulder': 9,
+    'RElbow': 10,
+    'RWrist': 11,
+    'RHip': 12,
+    'RKnee': 13,
+    'RAnkle': 14,
+    'LEye': 15,
+    'LEar': 16,
+    'REye': 17,
+    'REar': 18
+}
+```
+###3DPW
+This dataset is designed to capture the complexity and diversity of human activities in challenging real-world environments. It includes videos of people performing various activities in outdoor settings, such as walking, sitting, running, and more. The videos are recorded with multiple synchronized cameras from different viewpoints to capture the 3D pose and shape of the individuals. It provides detailed annotations for each frame, including 3D joint locations, 2D joint locations, 3D body mesh, camera parameters, and more.
+```sh
+3DPW_JOINTS = {
+    'Pelvis': 0,
+    'LHip': 1,
+    'RHip': 2,
+    'Spine': 3,
+    'LKnee': 4,
+    'RKnee': 5,
+    'Thorax': 6,
+    'LAnkle': 7,
+    'RAnkle': 8,
+    'Thorax_up': 9,
+    'LToe': 10,
+    'RToe': 11,
+    'Neck': 12,
+    'LCollar': 13,
+    'RCollar': 14,
+    'Jaw': 15,
+    'LShoulder': 16,
+    'RShoulder': 17,
+    'LElbow': 18,
+    'RElbow': 19,
+    'LWrist': 20,
+    'RWrist': 21,
+    'LHand': 22,
+    'RHand': 23
+}
+```
 ## Experimental Setup
 The training mode of 
 
