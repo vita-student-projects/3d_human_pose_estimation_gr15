@@ -332,7 +332,7 @@ python -m romp.test --configs_yml=configs/eval_3dpw_test_effnet.yml
 ```
 Edit the referenced `yaml` file to use the EfficientNet trained with protocol A.
 
-In order to benchmark the original backbones on the 3DPW VIBE dataset, exchange the `yaml` file above with the appropriate one from the [config](config) directory (named `eval_3dpw_test*`). CMU evaluation on their datasets is not discussed here.
+In order to benchmark the original backbones on the 3DPW VIBE dataset, exchange the `yaml` file above with the appropriate one from the [config](config) directory (named `eval_3dpw_test*`). CMU evaluation on their models is not discussed here.
 ## Resources
 [^1]: Sun, Y., Bao, Q., Liu, W., Fu, Y., Black, M. J., & Mei, T. (2020). Monocular, One-stage, Regression of Multiple 3D People. arXiv preprint arXiv:2008.12272.
 [^2]: Milestone 1 Report: https://drive.google.com/file/d/15AhJr35AdtqHdkhOHylhIPvTnorl-QHf/view?usp=drive_link
