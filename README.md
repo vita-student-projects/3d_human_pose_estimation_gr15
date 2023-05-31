@@ -12,7 +12,37 @@ This principle is explained in great detail in their original publication [^1]. 
 | GPU | NVIDIA GeForce GTX 1060 6GB| 
 | RAM | 32 GB | 
 
-To download and run the code of this repository, please see the sections "Set-Up" and "Usage Guide" at the bottom of this ReadMe.
+
+Click here to see the presentation video:
+
+[![Presentation Video](docs/thumb.png)](https://youtu.be/PeR72F4vGlE)
+
+**Table of Contents**
+
+- [ROMP - Monocular, One-stage Regression of Multiple 3D People](#romp---monocular-one-stage-regression-of-multiple-3d-people)
+  - [Contribution](#contribution)
+  - [Dataset](#dataset)
+    - [Human3.6M (H36M) Dataset](#human36m-h36m-dataset)
+    - [CMU Panoptic Studio Dataset](#cmu-panoptic-studio-dataset)
+    - [3DPW](#3dpw)
+  - [Experimental Setup](#experimental-setup)
+  - [Results](#results)
+    - [3DPW VIBE](#3dpw-vibe)
+    - [CMU Panoptic](#cmu-panoptic)
+    - [Inference Performance](#inference-performance)
+    - [Webcam Demo and Symmetry Issue](#webcam-demo-and-symmetry-issue)
+  - [Conclusion](#conclusion)
+  - [Set-Up](#set-up)
+    - [Codebase](#codebase)
+    - [Meta-Data](#meta-data)
+  - [Usage Guide](#usage-guide)
+    - [Webcam Demo](#webcam-demo)
+    - [Train](#train)
+    - [Evaluation](#evaluation)
+  - [Resources](#resources)
+
+
+
 ## Contribution
 
 As proposed in [^2], our main contribution is the replacement of their backbone with a smaller architecture in order to reduce the computational load of the AV embedded computer. This means that we modify the deeper layers of the network. Our approach is motivated by the fact that the backbones implemented by [^1] carry ~60 times more parameters than the Head (as shown in the table at the end of this section). More recent pose estimators analyzed in [^2] - especially [^4] - experience good performance by using the EfficientNet architecture. Since this structure promises similar performance using less parameters, we use this architecture to reduce the compute load. 
@@ -225,14 +255,14 @@ We observed during real-time inference from webcam, that the skeleton output is 
 
 ![resnet_real_vid](docs/results/resnet.gif)
 
-# Conclusion
+## Conclusion
 
 In this project, we successfully added the EfficientNet to the ROMP's backbone collection. We could demonstrate that with considerably less training, we could obtain loss values in the region of their networks. This fact as well as qualitative tests with the webcam proves the concept of our implementation. We note however, that the original objective of the backbone replacement - lower computational load and faster inference speed - could only be partly achieved. Despite having ~30% less parameters, our EfficientNet took longer than the ResNet to run the evaluations. The performance of the HRNet was surpassed however.
 
 To summarize, we could demonstrate the integration of the EfficientNet and that it can be placed between the original 2 backbones in terms of inference quality.
-# Set-Up
+## Set-Up
 
-## Codebase
+### Codebase
 ```sh
 # Clone Repositoy
 git clone https://github.com/vita-student-projects/3d_human_pose_estimation_gr15
@@ -244,7 +274,7 @@ conda activate ROMP
 conda install -n ROMP pytorch==1.10.0 torchvision==0.11.1 cudatoolkit=10.2 -c pytorch  
 pip install -r requirements.txt 
 ```
-## Meta-Data
+### Meta-Data
 The following guide downloads and unzips the meta-data. For non-Linux users, this can also be done by manually by downloading [model_data.zip](https://drive.google.com/file/d/1dcuNcdrXhUZrSKrfHuZJVK8OZQE7mEka/view?usp=drive_link) and [trained_models.zip](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link) and unzipping the archives in the repository folder.
 ```sh
 # cd 3d_human_pose_estimation_gr15
@@ -265,18 +295,18 @@ Remarks
 - This procedure was tested on Ubuntu 20.04 and 22.04 machines; we experiences unresolvable issues when trying this set-up in Windows
 - For training and evaluation, further dataset-downloads are necessary (see above)
 
-# Usage Guide
+## Usage Guide
 
 To comply with submission requirements, we generated the files [train.py](train.py), [inference.py](inference.py) and [dataset.py](dataset.py). These are just dummy-files that execute the scripts presented below via python subprocessing. It is recommended **not** to use them but to follow the instructions below.
 
-## Webcam Demo
+### Webcam Demo
 In order to execute a minimal webcam-inference demo, run
 ```bash
 python3 -m romp.predict.webcam --show_largest_person_only
 ```
 This will use our EfficientNet backbone trained on protocol B. To change the configuration, edit [webcam.yaml](configs/webcam.yml). The most important parameters are `backbone` and `model_path`. As the command suggests, only one person can be detected right now due to errors in their visualization pipeline.
 
-## Train
+### Train
 *Make sure that the `dataset_rootdir` is correct in [config.py](romp/lib/config.py) and that all required datasets are available!*
 
 The default training process continues train protocol B on the ROMP network with EfficientNet backbone:
@@ -290,7 +320,7 @@ To configure the training process, one must edit [v1_effnet.yml](configs/v1_effn
 If it is intended to train a non-EfficientNet backbone, one must also consider:
 - `model_path`: Pretrained model from which the training starts
 - `backbone`: Which backbone to use
-## Evaluation
+### Evaluation
 *Make sure that the `dataset_rootdir` is correct in [config.py](romp/lib/config.py) and that all required datasets are available!*
 
 In order to evaluate ROMP with EfficientNet trained on protocol B againt the test sets, run:
@@ -303,7 +333,7 @@ python -m romp.test --configs_yml=configs/eval_3dpw_test_effnet.yml
 Edit the referenced `yaml` file to use the EfficientNet trained with protocol A.
 
 In order to benchmark the original backbones on the 3DPW VIBE dataset, exchange the `yaml` file above with the appropriate one from the [config](config) directory (named `eval_3dpw_test*`). CMU evaluation on their datasets is not discussed here.
-# Resources
+## Resources
 [^1]: Sun, Y., Bao, Q., Liu, W., Fu, Y., Black, M. J., & Mei, T. (2020). Monocular, One-stage, Regression of Multiple 3D People. arXiv preprint arXiv:2008.12272.
 [^2]: Milestone 1 Report: https://drive.google.com/file/d/15AhJr35AdtqHdkhOHylhIPvTnorl-QHf/view?usp=drive_link
 [^3]: Original GitHub Repository https://github.com/Arthur151/ROMP
