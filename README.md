@@ -223,7 +223,7 @@ An exemplary processing of an input sample is visualized here using **our** Effi
 
 ![3dpw_result_ex](docs/results/PW3D_example_output.png)
 
-Further evaluation outputs with interactive 3D visualizations are available [here](https://drive.google.com/drive/folders/1gyrVaEcGeGK7fZsizhyrXpJ4hy6PUKOt?usp=drive_link). They must be downloaded prior and then opened in a web browser.
+Further evaluation outputs with interactive 3D visualizations are available [here](https://drive.google.com/drive/folders/1gyrVaEcGeGK7fZsizhyrXpJ4hy6PUKOt?usp=drive_link). They must be downloaded first and then opened in a web browser.
 
 ### CMU Panoptic
 *Batch-Size: 8*
