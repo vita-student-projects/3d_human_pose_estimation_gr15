@@ -258,9 +258,9 @@ We observed during real-time inference from webcam, that the skeleton output is 
 
 ## Conclusion
 
-In this project, we successfully added the EfficientNet to the ROMP's backbone collection. We could demonstrate that with considerably less training, we could obtain loss values in the region of their networks. This fact as well as qualitative tests with the webcam proves the concept of our implementation. We note however, that the original objective of the backbone replacement - lower computational load and faster inference speed - could only be partly achieved. Despite having ~30% less parameters, our EfficientNet took longer than the ResNet to run the evaluations. The performance of the HRNet was surpassed however.
+In this project, we successfully added the EfficientNet to the ROMP's backbone collection. We could show that with considerably less training, we could obtain loss values in the region of their networks. This fact as well as qualitative tests with the webcam proves the concept of our implementation. We note however, that the original objective of the backbone replacement - lower computational load and faster inference speed - could only be partly achieved. Despite having ~30% less parameters, our EfficientNet took longer than the ResNet to run the evaluations. The performance of the HRNet was surpassed however.
 
-To summarize, we could demonstrate the integration of the EfficientNet and that it can be placed between the original 2 backbones in terms of inference quality.
+To summarize, we could demonstrate the integration of the EfficientNet and that it can be placed between the original 2 backbones in terms of inference speed.
 ## Set-Up
 
 ### Codebase
