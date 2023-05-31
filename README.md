@@ -36,23 +36,25 @@ Due to the complexity and bugs of their code, we did not implement our second id
 
 ## Dataset
 
-All relevant datasets as well as the annotations were made available by the authors of [^1] via a [Google-drive folder](https://drive.google.com/drive/folders/1_g4AbXumhufs7YPdTAK3kFMnTQJYs3w3). They also include instructions on the directory structure such that the files can be processed by their code framework [^3] without any problem. See [this page](docs/dataset.md) for the specific procedure. Depending on the dataset location, one must adapt `dataset_rootdir` in the [config.py](romp/lib/config.py).
+All relevant datasets as well as the annotations were made available by the authors of [^1] via a [Google-drive folder](https://drive.google.com/drive/folders/1_g4AbXumhufs7YPdTAK3kFMnTQJYs3w3). They also include instructions on the directory structure such that the files can be processed by their code framework [^3] without any problem. See [this page](docs/dataset.md) for the specific procedure. Depending on the dataset location, one must adapt `dataset_rootdir` in the [config.py](romp/lib/config.py). The information below is taken from [^4]:
 
-| Dataset      | Examples Number | Keypoints |
-|--------------|-----------------|-----------|
-| MuCo         | 677k            | 21        |
-| MPII         | 27k             | 16        |
-| MPI-INF-3DHP | 627k            | 28        |
-| LSP          | 2k              | 14        |
-| Human3.6M    | 3.6M            | 32(17)    |
-| CrowdPose    | 20k             | 14        |
-| COCO         | 47k             | 17        |
-| CMU_Panoptic | 1.5M            | 19        |
-| AGORA        | 173k            | 66        |
-| 3DPW         | 60k             | 17        |
-| PoseTrack    | 66k             | 17        |
+| Dataset      | Examples Number | Keypoints | ROMP-ID |
+|--------------|-----------------|-----------|----|
+| MuCo         | 677k            | 21        | `muco`|
+| MPII         | 27k             | 16        |`mpii`|
+| MPI-INF-3DHP | 627k            | 28        |`mpiinf`|
+| LSP          | 2k              | 14        |`lsp`|
+| Human3.6M    | 3.6M            | 32(17)    |`h36m`|
+| CrowdPose    | 20k             | 14        |`crowdpose`|
+| COCO         | 47k             | 17        |`coco`|
+| CMU_Panoptic | 1.5M            | 19        |`cmup`|
+| AGORA        | 173k            | 66        | - |
+| 3DPW         | 60k             | 17        |`3dpw_test`|
+| PoseTrack    | 66k             | 17        |-|
 
-### Human3.6M (H36M) Dataset:
+The "ROMP-ID" describes how these datasets are referenced in the `ROMP` codebase (e.g. to select a dataset for training).
+
+### Human3.6M (H36M) Dataset
 This dataset provides a comprehensive and realistic dataset for analyzing human movements and poses in controlled conditions. It was collected using a motion capture system with 4 high-resolution cameras and 4D dynamic body markers. It consists of 11 professional actors (5 females and 6 males) performing 17 different activities in a well-controlled indoor environment with consistent lighting conditions and a static background. The dataset uses 32 joint keypoints, with 17 main keypoints defined as follows:
 ```sh
 H36M_JOINTS = {
@@ -80,7 +82,7 @@ If downloaded from the official website of Human3.6M, a preprocessing step is re
 ```sh
 python ROMP/romp/lib/dataset/preprocess/h36m_extract_frames.py h36m_extract_frames.py path/to/h36m_video_folder path/to/image_save_folder
 ```
-### CMU Panoptic Studio Dataset:
+### CMU Panoptic Studio Dataset
 This dataset provides a comprehensive and diverse set of annotations for human pose and tracking in complex real-world scenarios. It consists of video sequences captured from multiple camera views in various environments, including indoor and outdoor settings. For each frame in the dataset, it provides pixel-level 2D joint annotations for multiple individuals.
 ```sh
 CMU_JOINTS = {
@@ -154,6 +156,8 @@ Based on this, we tested following 2 train protocols:
 Train protocol A was implemented as a first proof-of-concept algorithm by us. The goal was to ensure that our backbone implemenentation yields somewhat usable results.
 
 Train protocol B follows the pre-configured protocol in the original code [^3].
+
+In both cases, we used the default learning rate and a batch size of 4 or 6.
 
 Remarks
 - One epoch with 10,0000 samples on our system took about 3 hours
@@ -255,9 +259,12 @@ rm trained_models.zip
 
 Remarks
 - This procedure was tested on Ubuntu 20.04 and 22.04 machines; we experiences unresolvable issues when trying this set-up in Windows
-- For training and evaluation, further dataset-downloads are necessary (see below)
+- For training and evaluation, further dataset-downloads are necessary (see above)
 
 # Usage Guide
+
+To comply with submission requirements, we generated the files [train.py](train.py), [inference.py](inference.py) and [dataset.py](dataset.py). These are just dummy-files that execute the scripts presented below via python subprocessing. It is recommended **not** to use them but to follow the instructions below.
+
 ## Webcam Demo
 In order to execute a minimal webcam-inference demo, run
 ```bash
