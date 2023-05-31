@@ -195,7 +195,7 @@ Train protocol B follows the pre-configured protocol in the original code [^3].
 In both cases, we used the default learning rate and a batch size of 4 or 6.
 
 Remarks
-- One epoch with 10,0000 samples on our system took about 3 hours
+- One epoch with 10,0000 samples took on our system about 3 hours
 - The pretraining process was deliberately not shared by the authors of [^3] (see for example this [GitHub issue](https://github.com/Arthur151/ROMP/issues/107) of [^3]'s maintainer)
 - The authors trained their models for about 2 weeks on four high-end GPUs (see this [GitHub comment](https://github.com/Arthur151/ROMP/issues/121#issuecomment-1026458361) of [^3]'s maintainer)
 - Trained weights were downloaded in the "Set-Up" section below; they are also available [here](https://drive.google.com/file/d/1E3-sDsQSGHe2fLmmO8oAE7UvSxzJfjtn/view?usp=drive_link)
@@ -334,7 +334,7 @@ Edit the referenced `yaml` file to use the EfficientNet trained with protocol A.
 
 In order to benchmark the original backbones on the 3DPW VIBE dataset, exchange the `yaml` file above with the appropriate one from the [config](config) directory (named `eval_3dpw_test*`). CMU evaluation on their models is not discussed here.
 ### Remarks
-- To comply with submission requirements, we generated the files [train.py](train.py), [inference.py](inference.py) and [dataset.py](dataset.py). These are just dummy-files that execute the scripts presented below via python subprocessing. It is recommended **not** to use them but to follow the instructions above.
+- To comply with submission requirements, we generated the files [train.py](train.py), [inference.py](inference.py) and [dataset.py](dataset.py). These are just dummy-files that execute the scripts presented above via python subprocessing. It is recommended **not** to use them but to follow the instructions above.
 - The scripts above require the presence of a GPU (webcam inference on CPU is possible by changing *all* `.cuda()` to `.cpu()` in the codebase)
 ## Resources
 [^1]: Sun, Y., Bao, Q., Liu, W., Fu, Y., Black, M. J., & Mei, T. (2020). Monocular, One-stage, Regression of Multiple 3D People. arXiv preprint arXiv:2008.12272.
