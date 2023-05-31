@@ -20,7 +20,10 @@ As proposed in [^2], our main contribution is the replacement of their backbone 
 ![contrib_overview](docs/contribution/overview.png)
 
 The specific network architecture we chose is the most recent EfficientNetV2-S which is conveniently available in `pytorch`. For the direct implementation, we took their ResNet-50 as a blueprint (bottom figure left). Since the backbone is the feature extractor in the ROMP application, we do not require the classifier layers. We copy their deconvolution layer-structure to generate the same output layers as before. As the EfficientNet's output-shape differs slightly from the ResNet's, we apply slightly different deconvolution shapes in our contribution. This is summarized here:
+
 ![contrib_detail](docs/contribution/resnet_effnet.png)
+
+The complete backbones can be inspected [here (ResNet)](docs/contribution/resnet_graph.pdf) and [here (EfficientNet)](docs/contribution/effnet_graph.pdf).
 
 This implementation cuts the number of parameters in the backbone by 18% and 28% compared to the HRNet-50 and ResNet-50 respectively. We implemented our contribution in order to fit in the original framework such that training, evaluation, and dataset handling can be overtaken directly.
 
@@ -30,6 +33,7 @@ This implementation cuts the number of parameters in the backbone by 18% and 28%
 | ResNet-50 backbone (in [^1])  | 32,552,896  |
 | EfficientNetV2-S backbone (our contribution)  |  23,496,592 |
 | Head  |  568,018 |
+
 
 Due to the complexity and bugs of their code, we did not implement our second idea of testing an additional loss term.
 
